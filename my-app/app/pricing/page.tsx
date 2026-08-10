@@ -1,7 +1,7 @@
-import PageHeader from "@/components/PageHeader";
-import Card from "@/components/Card";
-import Button from "@/components/Button";
-import Icon from "@/components/icons";
+import { PageHeader } from "@/components/ui";
+import { Card } from "@/components/Card";
+import { Button } from "@/components/Button";
+import { Icon } from "@/components/Icon";
 import { pricingPlans } from "@/lib/mock-data";
 
 export default function PricingPage() {
@@ -9,7 +9,7 @@ export default function PricingPage() {
     <div className="p-6 md:p-8 max-w-[1400px] mx-auto">
       <PageHeader
         title="요금제 관리"
-        subtitle="현재 사용 중인 요금제와 결제 정보를 확인하고 관리하세요."
+        desc="현재 사용 중인 요금제와 결제 정보를 확인하고 관리하세요."
       />
 
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_1fr_320px] gap-5 mb-5">
