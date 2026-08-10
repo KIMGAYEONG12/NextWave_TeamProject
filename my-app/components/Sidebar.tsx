@@ -3,6 +3,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import Icon, { IconName } from "./icons";
+import Modal from "./Modal";
+import Button from "./Button";
+import { pricingPlans } from "@/lib/mock-data";
 
 type NavItem = {
   href: string;
@@ -21,8 +24,8 @@ const sections: NavSection[] = [
     title: "운영 관리",
     items: [
       { href: "/", label: "대시보드", icon: "dashboard" },
-      { href: "/menu", label: "메뉴·재고 관리", icon: "menu" },
-      { href: "/orders", label: "주문(POS) 관리", icon: "orders", badge: 2 },
+      { href: "/menu", label: "메뉴·재고 관리", icon: "menu", badge: 2 },
+      { href: "/orders", label: "주문/결제(POS) 관리", icon: "orders", badge: 2 },
       { href: "/reservations", label: "예약 관리", icon: "reservation" },
       { href: "/seats", label: "실시간 좌석 현황", icon: "seats" },
       { href: "/sales", label: "매출·리포트", icon: "sales" },
@@ -40,6 +43,7 @@ const sections: NavSection[] = [
     title: "콘텐츠 & 마케팅",
     items: [
       { href: "/blog", label: "블로그 (CMS)", icon: "blog" },
+      { href: "/community", label: "리뷰·커뮤니티", icon: "community" },
       { href: "/seo", label: "SEO 노출 관리", icon: "seo" },
     ],
   },
@@ -60,6 +64,9 @@ const sections: NavSection[] = [
 export default function Sidebar() {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
+  const [proOpen, setProOpen] = useState(false);
+  const proPlan = pricingPlans.find((p) => p.name === "프로페셔널") ?? pricingPlans[1];
+  const enterprisePlan = pricingPlans.find((p) => p.name === "엔터프라이즈") ?? pricingPlans[2];
 
   return (
     <aside
@@ -132,11 +139,52 @@ export default function Sidebar() {
               <span className="text-sm font-semibold">프로 기능</span>
               <span className="text-[10px] bg-white/20 rounded px-1.5 py-0.5">Pro</span>
             </div>
-            <button className="text-xs text-white/90 underline underline-offset-2">
+            <button
+              onClick={() => setProOpen(true)}
+              className="text-xs text-white/90 underline underline-offset-2"
+            >
               프로 기능 더 보기 →
             </button>
           </div>
         )}
+
+        <Modal
+          open={proOpen}
+          onClose={() => setProOpen(false)}
+          title="프로 기능 더 보기"
+          footer={
+            <>
+              <Button variant="outline" onClick={() => setProOpen(false)}>
+                닫기
+              </Button>
+              <Link href="/pricing" onClick={() => setProOpen(false)}>
+                <Button>요금제 관리로 이동</Button>
+              </Link>
+            </>
+          }
+        >
+          <p className="text-sm text-ink-500 mb-4">
+            현재 <span className="font-semibold text-ink-800">{proPlan.name}</span> 요금제에서 이용 중인 기능과, 상위 요금제에서 추가로 이용할 수 있는 기능입니다.
+          </p>
+          <p className="text-xs font-semibold text-ink-400 mb-2">프로페셔널 포함 기능</p>
+          <ul className="space-y-1.5 text-sm text-ink-700 mb-4">
+            {proPlan.features.map((f) => (
+              <li key={f} className="flex items-center gap-2">
+                <Icon name="check" className="w-3.5 h-3.5 text-brand-500 shrink-0" />
+                {f}
+              </li>
+            ))}
+          </ul>
+          <p className="text-xs font-semibold text-ink-400 mb-2">엔터프라이즈로 업그레이드 시</p>
+          <ul className="space-y-1.5 text-sm text-ink-500">
+            {enterprisePlan.features.map((f) => (
+              <li key={f} className="flex items-center gap-2">
+                <Icon name="check" className="w-3.5 h-3.5 text-ink-300 shrink-0" />
+                {f}
+              </li>
+            ))}
+          </ul>
+        </Modal>
         <div className="flex items-center gap-2.5 px-2 py-2 border-t border-ink-100 pt-3">
           <div className="w-8 h-8 rounded-full bg-ink-100 flex items-center justify-center shrink-0">
             <span className="text-sm">☕</span>

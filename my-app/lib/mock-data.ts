@@ -1,19 +1,43 @@
+export const stores = [
+  { id: 1, name: "OOO 커피 강남점", address: "서울특별시 강남구 테헤란로 123-4" },
+  { id: 2, name: "OOO 커피 대구점", address: "대구광역시 중구 동성로 45-2" },
+  { id: 3, name: "OOO 커피 홍대점", address: "서울특별시 마포구 와우산로 21" },
+];
+
 export const salesTrend = [
-  { day: "8/1(토)", value: 82000 },
-  { day: "8/2(일)", value: 91000 },
-  { day: "8/3(월)", value: 61000 },
-  { day: "8/4(화)", value: 128000 },
-  { day: "8/5(수)", value: 165000 },
-  { day: "8/6(목)", value: 143000 },
-  { day: "8/7(금)", value: 186000 },
+  { day: "8/1(토)", value: 38000 },
+  { day: "8/2(일)", value: 45000 },
+  { day: "8/3(월)", value: 32000 },
+  { day: "8/4(화)", value: 56000 },
+  { day: "8/5(수)", value: 72000 },
+  { day: "8/6(목)", value: 58000 },
+  { day: "8/7(금)", value: 66000 },
+];
+
+export const hourlySales = [
+  { hour: 7, value: 42000, orders: 9 },
+  { hour: 8, value: 118000, orders: 24 },
+  { hour: 9, value: 96000, orders: 19 },
+  { hour: 10, value: 74000, orders: 15 },
+  { hour: 11, value: 88000, orders: 17 },
+  { hour: 12, value: 156000, orders: 31 },
+  { hour: 13, value: 142000, orders: 28 },
+  { hour: 14, value: 101000, orders: 20 },
+  { hour: 15, value: 128000, orders: 26 },
+  { hour: 16, value: 134000, orders: 27 },
+  { hour: 17, value: 92000, orders: 18 },
+  { hour: 18, value: 68000, orders: 14 },
+  { hour: 19, value: 54000, orders: 11 },
+  { hour: 20, value: 38000, orders: 8 },
+  { hour: 21, value: 22000, orders: 5 },
 ];
 
 export const topMenus = [
-  { rank: 1, name: "카페라떼", sold: "판매 128잔" },
-  { rank: 2, name: "아메리카노", sold: "판매 112잔" },
-  { rank: 3, name: "바닐라 라떼", sold: "판매 98잔" },
-  { rank: 4, name: "크루아상", sold: "판매 74개" },
-  { rank: 5, name: "카라멜 마끼아또", sold: "판매 64잔" },
+  { rank: 1, name: "싱글오리진 드립", sold: "판매 84잔", img: "🫖" },
+  { rank: 2, name: "카페라떼", sold: "판매 67잔", img: "🥛" },
+  { rank: 3, name: "크루아상", sold: "판매 41개", img: "🥐" },
+  { rank: 4, name: "바닐라 라떼", sold: "판매 38잔", img: "🍮" },
+  { rank: 5, name: "아메리카노", sold: "판매 36잔", img: "☕" },
 ];
 
 export const todayReservations = [
@@ -42,19 +66,24 @@ export const orderList = [
 ];
 
 export const seatData = [
-  { id: 1, label: "1", status: "empty" },
-  { id: 2, label: "2", status: "empty" },
-  { id: 3, label: "3", status: "used" },
-  { id: 4, label: "4", status: "reserved" },
-  { id: 5, label: "5", status: "empty" },
-  { id: 6, label: "6", status: "empty" },
-  { id: 7, label: "7", status: "used" },
-  { id: 8, label: "8", status: "empty" },
-  { id: 9, label: "9", status: "used" },
-  { id: 10, label: "10", status: "empty" },
-  { id: 11, label: "11", status: "empty" },
-  { id: 12, label: "12", status: "cleaning" },
-  { id: 13, label: "13", status: "empty" },
+  { id: 1, label: "1", status: "used", zone: "window" },
+  { id: 2, label: "2", status: "used", zone: "window" },
+  { id: 3, label: "3", status: "empty", zone: "window" },
+  { id: 4, label: "4", status: "reserved", zone: "window" },
+  { id: 5, label: "5", status: "empty", zone: "window" },
+  { id: 6, label: "6", status: "empty", zone: "table" },
+  { id: 7, label: "7", status: "used", zone: "table" },
+  { id: 8, label: "8", status: "empty", zone: "table" },
+  { id: 9, label: "9", status: "reserved", zone: "table" },
+  { id: 10, label: "10", status: "empty", zone: "table" },
+  { id: 11, label: "11", status: "empty", zone: "table" },
+  { id: 12, label: "12", status: "cleaning", zone: "table" },
+  { id: 13, label: "13", status: "empty", zone: "table" },
+];
+
+export const patioSeats = [
+  { id: "T1", status: "reserved" },
+  { id: "T2", status: "empty" },
 ];
 
 export const members = [

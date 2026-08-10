@@ -31,7 +31,10 @@ export default function OrdersPage() {
 
   return (
     <div className="p-6 md:p-8 max-w-[1400px] mx-auto">
-      <PageHeader title="주문 (POS) 관리" subtitle="매장 주문 내역과 결제 상태를 관리하세요." />
+      <PageHeader
+        title="주문 (POS) 관리"
+        subtitle="매장 주문 내역과 결제 상태를 관리하세요."
+      />
 
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-5">
         <Card padded={false}>
@@ -39,9 +42,23 @@ export default function OrdersPage() {
             <StoreTabs
               tabs={[
                 { key: "all", label: "전체 주문", count: orderList.length },
-                { key: "progress", label: "진행 중", count: orderList.filter((o) => o.status === "접수" || o.status === "준비중").length },
-                { key: "done", label: "완료", count: orderList.filter((o) => o.status === "완료").length },
-                { key: "cancel", label: "취소", count: orderList.filter((o) => o.status === "취소").length },
+                {
+                  key: "progress",
+                  label: "진행 중",
+                  count: orderList.filter(
+                    (o) => o.status === "접수" || o.status === "준비중",
+                  ).length,
+                },
+                {
+                  key: "done",
+                  label: "완료",
+                  count: orderList.filter((o) => o.status === "완료").length,
+                },
+                {
+                  key: "cancel",
+                  label: "취소",
+                  count: orderList.filter((o) => o.status === "취소").length,
+                },
               ]}
               active={tab}
               onChange={setTab}
@@ -76,10 +93,14 @@ export default function OrdersPage() {
                     key={o.id}
                     onClick={() => setSelected(o)}
                     className={`border-b border-ink-50 cursor-pointer ${
-                      selected.id === o.id ? "bg-brand-50/50" : "hover:bg-ink-50"
+                      selected.id === o.id
+                        ? "bg-brand-50/50"
+                        : "hover:bg-ink-50"
                     }`}
                   >
-                    <td className="px-5 py-3 font-medium text-brand-700">{o.id}</td>
+                    <td className="px-5 py-3 font-medium text-brand-700">
+                      {o.id}
+                    </td>
                     <td className="px-2 py-3 text-ink-700">{o.customer}</td>
                     <td className="px-2 py-3 text-ink-500">{o.items}</td>
                     <td className="px-2 py-3 text-ink-800">{o.amount}</td>
@@ -96,7 +117,9 @@ export default function OrdersPage() {
 
         <Card>
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-base font-semibold text-ink-900">주문 상세 {selected.id}</h3>
+            <h3 className="text-base font-semibold text-ink-900">
+              주문 상세 {selected.id}
+            </h3>
             <Badge tone={statusTone[selected.status]}>{selected.status}</Badge>
           </div>
           <dl className="text-sm space-y-2 mb-4">
@@ -112,7 +135,10 @@ export default function OrdersPage() {
           <p className="text-xs font-semibold text-ink-400 mb-2">주문 내역</p>
           <div className="rounded-lg border border-ink-100 divide-y divide-ink-50 mb-4">
             {selected.items.split(" + ").map((line) => (
-              <div key={line} className="flex justify-between px-3 py-2.5 text-sm">
+              <div
+                key={line}
+                className="flex justify-between px-3 py-2.5 text-sm"
+              >
                 <span className="text-ink-700">{line}</span>
                 <span className="text-ink-400">x1</span>
               </div>
@@ -120,13 +146,19 @@ export default function OrdersPage() {
           </div>
           <div className="flex justify-between items-center bg-ink-50 rounded-lg px-3 py-3 mb-5">
             <span className="text-sm text-ink-600">합계</span>
-            <span className="text-lg font-bold text-ink-900">{selected.amount}</span>
+            <span className="text-lg font-bold text-ink-900">
+              {selected.amount}
+            </span>
           </div>
           <div className="flex gap-2">
             <Button className="flex-1">준비 완료</Button>
-            <Button variant="danger" className="flex-1">주문 취소</Button>
+            <Button variant="danger" className="flex-1">
+              주문 취소
+            </Button>
           </div>
-          <Button variant="outline" className="w-full mt-2">영수증 출력</Button>
+          <Button variant="outline" className="w-full mt-2">
+            영수증 출력
+          </Button>
         </Card>
       </div>
     </div>

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Icon from "./icons";
+import StoreSwitcher from "./StoreSwitcher";
 
 
 export default function PageHeader({
@@ -36,15 +37,7 @@ export default function PageHeader({
             </span>
           )}
         </Link>
-        <div className="flex items-center gap-2 rounded-lg border border-ink-200 bg-white px-2 py-1.5">
-          <div className="w-6 h-6 rounded-full bg-ink-100 flex items-center justify-center text-xs">
-            ☕
-          </div>
-          <span className="text-xs text-ink-700 font-medium pr-1">
-            OOO 커피
-          </span>
-          <Icon name="chevronDown" className="w-3.5 h-3.5 text-ink-400" />
-        </div>
+        <StoreSwitcher />
       </div>
     </div>
   );

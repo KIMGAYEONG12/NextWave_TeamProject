@@ -13,18 +13,51 @@ export default function MembershipPage() {
 
   return (
     <div className="p-6 md:p-8 max-w-[1400px] mx-auto">
-      <PageHeader title="멤버십 (포인트·쿠폰)" subtitle="포인트 적립 정책을 설정하고 쿠폰을 발급/관리하세요." />
+      <PageHeader
+        title="멤버십 (포인트·쿠폰)"
+        subtitle="포인트 적립 정책을 설정하고 쿠폰을 발급/관리하세요."
+      />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
-        <StatCard label="총 회원 수" value="1,248명" delta="▲ 12명" deltaLabel="(이번 주)" icon="customers" iconTone="blue" />
-        <StatCard label="보유 포인트 합계" value="98,450P" delta="▲ 8,230P" deltaLabel="(이번 주)" icon="membership" iconTone="green" />
-        <StatCard label="이번 달 사용 포인트" value="24,300P" delta="▲ 18%" deltaLabel="" icon="sales" iconTone="amber" />
-        <StatCard label="쿠폰 사용률" value="38%" delta="▲ 5%" deltaLabel="" icon="pricing" iconTone="purple" />
+        <StatCard
+          label="총 회원 수"
+          value="1,248명"
+          delta="▲ 12명"
+          deltaLabel="(이번 주)"
+          icon="customers"
+          iconTone="blue"
+        />
+        <StatCard
+          label="보유 포인트 합계"
+          value="98,450P"
+          delta="▲ 8,230P"
+          deltaLabel="(이번 주)"
+          icon="membership"
+          iconTone="green"
+        />
+        <StatCard
+          label="이번 달 사용 포인트"
+          value="24,300P"
+          delta="▲ 18%"
+          deltaLabel=""
+          icon="sales"
+          iconTone="amber"
+        />
+        <StatCard
+          label="쿠폰 사용률"
+          value="38%"
+          delta="▲ 5%"
+          deltaLabel=""
+          icon="pricing"
+          iconTone="purple"
+        />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-[360px_1fr] gap-5">
         <Card>
-          <h3 className="text-sm font-semibold text-ink-800 mb-4">포인트 적립 정책</h3>
+          <h3 className="text-sm font-semibold text-ink-800 mb-4">
+            포인트 적립 정책
+          </h3>
           <label className="text-xs text-ink-500 mb-1 block">적립률</label>
           <div className="flex items-center gap-2 mb-4">
             <Input
@@ -35,7 +68,9 @@ export default function MembershipPage() {
             />
             <span className="text-sm text-ink-500">% 결제 금액 대비</span>
           </div>
-          <label className="text-xs text-ink-500 mb-1 block">최소 사용 가능 포인트</label>
+          <label className="text-xs text-ink-500 mb-1 block">
+            최소 사용 가능 포인트
+          </label>
           <div className="flex items-center gap-2 mb-4">
             <Input defaultValue={1000} type="number" className="w-24" />
             <span className="text-sm text-ink-500">P 이상</span>
@@ -67,13 +102,22 @@ export default function MembershipPage() {
               </thead>
               <tbody>
                 {coupons.map((c) => (
-                  <tr key={c.name} className="border-b border-ink-50 hover:bg-ink-50">
-                    <td className="px-5 py-3 font-medium text-ink-800">{c.name}</td>
+                  <tr
+                    key={c.name}
+                    className="border-b border-ink-50 hover:bg-ink-50"
+                  >
+                    <td className="px-5 py-3 font-medium text-ink-800">
+                      {c.name}
+                    </td>
                     <td className="px-2 py-3 text-ink-600">{c.desc}</td>
                     <td className="px-2 py-3 text-ink-500">{c.target}</td>
-                    <td className="px-2 py-3 text-ink-400 text-xs">{c.period}</td>
+                    <td className="px-2 py-3 text-ink-400 text-xs">
+                      {c.period}
+                    </td>
                     <td className="px-2 py-3">
-                      <Badge tone={c.status === "진행중" ? "green" : "gray"}>{c.status}</Badge>
+                      <Badge tone={c.status === "진행중" ? "green" : "gray"}>
+                        {c.status}
+                      </Badge>
                     </td>
                     <td className="px-2 py-3 text-ink-600">{c.used}</td>
                     <td className="px-5 py-3 text-ink-400">···</td>
@@ -83,7 +127,9 @@ export default function MembershipPage() {
             </table>
           </div>
           <div className="px-5 py-3">
-            <a href="#" className="text-xs text-brand-600 font-medium">전체 쿠폰 보기 →</a>
+            <a href="#" className="text-xs text-brand-600 font-medium">
+              전체 쿠폰 보기 →
+            </a>
           </div>
         </Card>
       </div>

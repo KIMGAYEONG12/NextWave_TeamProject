@@ -10,11 +10,16 @@ import Button from "@/components/Button";
 import Badge from "@/components/Badge";
 import Icon from "@/components/icons";
 import ReviewInput from "@/components/ReviewInput";
-import { members, reviews } from "@/lib/mock-data";
+import AuthGate from "@/components/AuthGate";
+import { useToast } from "@/components/Toast";
+import { members, reviews as initialReviews } from "@/lib/mock-data";
 
 type TabKey = "customers" | "reviews" | "reports";
 
-const gradeTone: Record<string, "navy" | "amber" | "gray" | "purple" | "green"> = {
+const gradeTone: Record<
+  string,
+  "navy" | "amber" | "gray" | "purple" | "green"
+> = {
   VIP: "navy",
   GOLD: "amber",
   SILVER: "gray",
@@ -23,12 +28,28 @@ const gradeTone: Record<string, "navy" | "amber" | "gray" | "purple" | "green"> 
 };
 
 export default function CustomersPage() {
+  const { show } = useToast();
   const [tab, setTab] = useState<TabKey>("reviews");
   const [selected, setSelected] = useState(members[0]);
+  const [reviews, setReviews] = useState(
+    initialReviews.map((r) => ({ ...r, ownerReply: null as string | null })),
+  );
+
+  const submitReply = (name: string, text: string) => {
+    setReviews((prev) =>
+      prev.map((r) =>
+        r.name === name ? { ...r, ownerReply: text, status: "답변 완료" } : r,
+      ),
+    );
+    show("답글이 등록되었습니다.");
+  };
 
   return (
     <div className="p-6 md:p-8 max-w-[1400px] mx-auto">
-      <PageHeader title="고객 및 리뷰 관리" subtitle="고객 정보와 리뷰를 한눈에 보고 관리하세요." />
+      <PageHeader
+        title="고객 및 리뷰 관리"
+        subtitle="고객 정보와 리뷰를 한눈에 보고 관리하세요."
+      />
 
       <div className="mb-5">
         <StoreTabs
@@ -45,10 +66,38 @@ export default function CustomersPage() {
       {tab === "reviews" && (
         <>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
-            <StatCard label="전체 리뷰" value="152개" delta="▲ 18개" deltaLabel="(이번 주)" icon="star" iconTone="blue" />
-            <StatCard label="평균 평점" value="4.7 / 5" delta="▲ 0.2" deltaLabel="" icon="star" iconTone="amber" />
-            <StatCard label="답변 완료율" value="92%" delta="▲ 8%" deltaLabel="" icon="check" iconTone="green" />
-            <StatCard label="신고/차단 요청" value="3건" delta="▲ 1건" deltaLabel="" icon="aiSettings" iconTone="red" />
+            <StatCard
+              label="전체 리뷰"
+              value="152개"
+              delta="▲ 18개"
+              deltaLabel="(이번 주)"
+              icon="star"
+              iconTone="blue"
+            />
+            <StatCard
+              label="평균 평점"
+              value="4.7 / 5"
+              delta="▲ 0.2"
+              deltaLabel=""
+              icon="star"
+              iconTone="amber"
+            />
+            <StatCard
+              label="답변 완료율"
+              value="92%"
+              delta="▲ 8%"
+              deltaLabel=""
+              icon="check"
+              iconTone="green"
+            />
+            <StatCard
+              label="신고/차단 요청"
+              value="3건"
+              delta="▲ 1건"
+              deltaLabel=""
+              icon="aiSettings"
+              iconTone="red"
+            />
           </div>
 
           <Card padded={false}>
@@ -72,28 +121,60 @@ export default function CustomersPage() {
               {reviews.map((r) => (
                 <div key={r.name} className="px-5 py-4">
                   <div className="flex items-start gap-3">
-                    <div className="w-10 h-10 rounded-full bg-ink-100 flex items-center justify-center shrink-0">🙂</div>
+                    <div className="w-10 h-10 rounded-full bg-ink-100 flex items-center justify-center shrink-0">
+                      🙂
+                    </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
-                          <p className="text-sm font-semibold text-ink-800">{r.name}</p>
-                          <span className="text-xs text-ink-400">{r.grade}</span>
+                          <p className="text-sm font-semibold text-ink-800">
+                            {r.name}
+                          </p>
+                          <span className="text-xs text-ink-400">
+                            {r.grade}
+                          </span>
                         </div>
                         <span className="text-xs text-ink-400">{r.date}</span>
                       </div>
                       <div className="flex items-center gap-2 my-1">
                         <div className="flex text-amber-400">
                           {Array.from({ length: 5 }).map((_, i) => (
-                            <Icon key={i} name="star" className={`w-3.5 h-3.5 ${i < Math.round(r.rating) ? "" : "text-ink-200"}`} />
+                            <Icon
+                              key={i}
+                              name="star"
+                              className={`w-3.5 h-3.5 ${i < Math.round(r.rating) ? "" : "text-ink-200"}`}
+                            />
                           ))}
                         </div>
-                        <span className="text-xs text-ink-500">{r.rating.toFixed(1)}</span>
-                        <Badge tone={r.status === "답변 완료" ? "green" : r.status === "신고 접수" ? "red" : "amber"}>
+                        <span className="text-xs text-ink-500">
+                          {r.rating.toFixed(1)}
+                        </span>
+                        <Badge
+                          tone={
+                            r.status === "답변 완료"
+                              ? "green"
+                              : r.status === "신고 접수"
+                                ? "red"
+                                : "amber"
+                          }
+                        >
                           {r.status}
                         </Badge>
                       </div>
                       <p className="text-sm text-ink-600 mb-2">{r.content}</p>
-                      <ReviewInput />
+                      {r.ownerReply && (
+                        <div className="rounded-lg bg-ink-50 border border-ink-100 px-3 py-2 mb-2">
+                          <p className="text-xs font-semibold text-ink-500 mb-0.5">
+                            사장님 답글
+                          </p>
+                          <p className="text-sm text-ink-700">{r.ownerReply}</p>
+                        </div>
+                      )}
+                      <AuthGate message="로그인 후 답글을 작성할 수 있습니다.">
+                        <ReviewInput
+                          onSubmit={(text) => submitReply(r.name, text)}
+                        />
+                      </AuthGate>
                     </div>
                     <button className="text-ink-300 hover:text-ink-600">
                       <Icon name="dots" className="w-4 h-4" />
@@ -103,7 +184,9 @@ export default function CustomersPage() {
               ))}
             </div>
             <div className="px-5 py-3">
-              <a href="#" className="text-xs text-brand-600 font-medium">전체 리뷰 보기 →</a>
+              <a href="#" className="text-xs text-brand-600 font-medium">
+                전체 리뷰 보기 →
+              </a>
             </div>
           </Card>
         </>
@@ -149,13 +232,19 @@ export default function CustomersPage() {
                         <p className="font-medium text-ink-800">{m.name}</p>
                         <p className="text-xs text-ink-400">{m.email}</p>
                       </td>
-                      <td className="px-2 py-3"><Badge tone={gradeTone[m.grade]}>{m.grade}</Badge></td>
+                      <td className="px-2 py-3">
+                        <Badge tone={gradeTone[m.grade]}>{m.grade}</Badge>
+                      </td>
                       <td className="px-2 py-3 text-ink-700">{m.points}</td>
                       <td className="px-2 py-3 text-ink-500">{m.visits}</td>
-                      <td className="px-2 py-3 text-ink-400 text-xs">{m.lastVisit}</td>
+                      <td className="px-2 py-3 text-ink-400 text-xs">
+                        {m.lastVisit}
+                      </td>
                       <td className="px-2 py-3 text-ink-800">{m.total}</td>
                       <td className="px-5 py-3">
-                        <Button size="sm" variant="outline">상세 보기</Button>
+                        <Button size="sm" variant="outline">
+                          상세 보기
+                        </Button>
                       </td>
                     </tr>
                   ))}
@@ -166,33 +255,59 @@ export default function CustomersPage() {
 
           <Card>
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 rounded-full bg-ink-100 flex items-center justify-center">🙂</div>
+              <div className="w-12 h-12 rounded-full bg-ink-100 flex items-center justify-center">
+                🙂
+              </div>
               <div>
-                <p className="text-sm font-semibold text-ink-900">{selected.name}</p>
-                <Badge tone={gradeTone[selected.grade]} className="mt-1">{selected.grade}</Badge>
+                <p className="text-sm font-semibold text-ink-900">
+                  {selected.name}
+                </p>
+                <Badge tone={gradeTone[selected.grade]} className="mt-1">
+                  {selected.grade}
+                </Badge>
               </div>
             </div>
-            <p className="text-xs text-ink-400 mb-4">{selected.email} · {selected.phone}</p>
+            <p className="text-xs text-ink-400 mb-4">
+              {selected.email} · {selected.phone}
+            </p>
             <div className="grid grid-cols-3 gap-2 text-center mb-4">
               <div className="rounded-lg bg-ink-50 py-2">
-                <p className="text-sm font-bold text-ink-900">{selected.points}</p>
+                <p className="text-sm font-bold text-ink-900">
+                  {selected.points}
+                </p>
                 <p className="text-[11px] text-ink-400">포인트</p>
               </div>
               <div className="rounded-lg bg-ink-50 py-2">
-                <p className="text-sm font-bold text-ink-900">{selected.visits}</p>
+                <p className="text-sm font-bold text-ink-900">
+                  {selected.visits}
+                </p>
                 <p className="text-[11px] text-ink-400">방문 횟수</p>
               </div>
               <div className="rounded-lg bg-ink-50 py-2">
-                <p className="text-sm font-bold text-ink-900">{selected.total}</p>
+                <p className="text-sm font-bold text-ink-900">
+                  {selected.total}
+                </p>
                 <p className="text-[11px] text-ink-400">총 주문 금액</p>
               </div>
             </div>
             <p className="text-xs font-semibold text-ink-400 mb-2">등급 혜택</p>
             <ul className="space-y-1.5 text-sm text-ink-600 mb-5">
-              <li className="flex items-center gap-2"><Icon name="check" className="w-3.5 h-3.5 text-brand-500" /> 모든 메뉴 10% 할인</li>
-              <li className="flex items-center gap-2"><Icon name="check" className="w-3.5 h-3.5 text-brand-500" /> 생일 쿠폰 제공</li>
-              <li className="flex items-center gap-2"><Icon name="check" className="w-3.5 h-3.5 text-brand-500" /> 우선 예약 혜택</li>
-              <li className="flex items-center gap-2"><Icon name="check" className="w-3.5 h-3.5 text-brand-500" /> 신메뉴 시식 초대</li>
+              <li className="flex items-center gap-2">
+                <Icon name="check" className="w-3.5 h-3.5 text-brand-500" />{" "}
+                모든 메뉴 10% 할인
+              </li>
+              <li className="flex items-center gap-2">
+                <Icon name="check" className="w-3.5 h-3.5 text-brand-500" />{" "}
+                생일 쿠폰 제공
+              </li>
+              <li className="flex items-center gap-2">
+                <Icon name="check" className="w-3.5 h-3.5 text-brand-500" />{" "}
+                우선 예약 혜택
+              </li>
+              <li className="flex items-center gap-2">
+                <Icon name="check" className="w-3.5 h-3.5 text-brand-500" />{" "}
+                신메뉴 시식 초대
+              </li>
             </ul>
             <Button className="w-full">고객 상세 정보 보기</Button>
           </Card>
@@ -202,7 +317,8 @@ export default function CustomersPage() {
       {tab === "reports" && (
         <Card>
           <p className="text-sm text-ink-500">
-            신고 및 차단 처리 대기 중인 항목이 없습니다. 새로운 신고가 접수되면 이곳에 표시됩니다.
+            신고 및 차단 처리 대기 중인 항목이 없습니다. 새로운 신고가 접수되면
+            이곳에 표시됩니다.
           </p>
         </Card>
       )}

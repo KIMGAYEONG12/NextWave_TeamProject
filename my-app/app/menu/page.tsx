@@ -9,7 +9,15 @@ import Badge from "@/components/Badge";
 import Icon from "@/components/icons";
 import { menuItems } from "@/lib/mock-data";
 
-const categories = ["전체", "커피", "논커피", "티", "디저트", "베이커리", "시즌메뉴"];
+const categories = [
+  "전체",
+  "커피",
+  "논커피",
+  "티",
+  "디저트",
+  "베이커리",
+  "시즌메뉴",
+];
 
 export default function MenuPage() {
   const [activeCat, setActiveCat] = useState("전체");
@@ -82,10 +90,20 @@ export default function MenuPage() {
                 <div className="w-full aspect-square rounded-lg bg-ink-50 flex items-center justify-center text-3xl mb-2">
                   {item.img}
                 </div>
-                <p className="text-sm font-medium text-ink-800 truncate">{item.name}</p>
-                <p className="text-xs text-ink-400">{item.price.toLocaleString()}원</p>
+                <p className="text-sm font-medium text-ink-800 truncate">
+                  {item.name}
+                </p>
+                <p className="text-xs text-ink-400">
+                  {item.price.toLocaleString()}원
+                </p>
                 <Badge
-                  tone={item.stockLevel === "ok" ? "green" : item.stockLevel === "low" ? "amber" : "red"}
+                  tone={
+                    item.stockLevel === "ok"
+                      ? "green"
+                      : item.stockLevel === "low"
+                        ? "amber"
+                        : "red"
+                  }
                   className="mt-1.5"
                 >
                   재고: {item.stock}
@@ -120,7 +138,9 @@ export default function MenuPage() {
           <p className="text-xs font-semibold text-ink-400 mb-2">기본 정보</p>
           <div className="space-y-3 mb-5">
             <div>
-              <label className="text-xs text-ink-500 mb-1 block">카테고리</label>
+              <label className="text-xs text-ink-500 mb-1 block">
+                카테고리
+              </label>
               <Select defaultValue={selected.category}>
                 {categories.slice(1).map((c) => (
                   <option key={c}>{c}</option>
@@ -128,11 +148,15 @@ export default function MenuPage() {
               </Select>
             </div>
             <div>
-              <label className="text-xs text-ink-500 mb-1 block">판매 가격</label>
+              <label className="text-xs text-ink-500 mb-1 block">
+                판매 가격
+              </label>
               <Input defaultValue={selected.price} type="number" />
             </div>
             <div>
-              <label className="text-xs text-ink-500 mb-1 block">메뉴 설명</label>
+              <label className="text-xs text-ink-500 mb-1 block">
+                메뉴 설명
+              </label>
               <textarea
                 className="w-full rounded-lg border border-ink-200 text-sm px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-200"
                 rows={2}
@@ -144,21 +168,27 @@ export default function MenuPage() {
           <p className="text-xs font-semibold text-ink-400 mb-2">재고 정보</p>
           <div className="space-y-3 mb-6">
             <div>
-              <label className="text-xs text-ink-500 mb-1 block">재고 설정</label>
+              <label className="text-xs text-ink-500 mb-1 block">
+                재고 설정
+              </label>
               <Select defaultValue="track">
                 <option value="track">추적함</option>
                 <option value="none">추적안함</option>
               </Select>
             </div>
             <div>
-              <label className="text-xs text-ink-500 mb-1 block">현재 재고</label>
+              <label className="text-xs text-ink-500 mb-1 block">
+                현재 재고
+              </label>
               <Input defaultValue={selected.stock} />
             </div>
           </div>
 
           <div className="flex gap-2">
             <Button className="flex-1">수정</Button>
-            <Button variant="danger" className="flex-1">삭제</Button>
+            <Button variant="danger" className="flex-1">
+              삭제
+            </Button>
           </div>
         </Card>
       </div>

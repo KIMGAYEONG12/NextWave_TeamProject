@@ -30,7 +30,9 @@ export type IconName =
   | "check"
   | "x"
   | "coffee"
-  | "camera";
+  | "camera"
+  | "info"
+  | "community";
 
 const paths: Record<IconName, React.ReactNode> = {
   dashboard: (
@@ -220,6 +222,21 @@ const paths: Record<IconName, React.ReactNode> = {
     <>
       <path d="M4 8h3l1.5-2h7L17 8h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1Z" />
       <circle cx="12" cy="14" r="3.5" />
+    </>
+  ),
+  info: (
+    <>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 11v6" />
+      <path d="M12 7.5h.01" />
+    </>
+  ),
+  community: (
+    <>
+      <path d="M8 12a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z" />
+      <path d="M16 12.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
+      <path d="M2.5 20c.6-3 3-5 5.5-5s4.9 2 5.5 5" />
+      <path d="M13.5 20c.4-2.2 1.9-3.9 3.8-4.6" />
     </>
   ),
 };

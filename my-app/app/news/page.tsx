@@ -98,11 +98,22 @@ export default function NewsPage() {
             </thead>
             <tbody>
               {filtered.map((n) => (
-                <tr key={n.title} className="border-b border-ink-50 hover:bg-ink-50">
-                  <td className="px-5 py-3 font-medium text-ink-800">{n.title}</td>
-                  <td className="px-2 py-3"><Badge tone={n.type === "이벤트" ? "purple" : "blue"}>{n.type}</Badge></td>
+                <tr
+                  key={n.title}
+                  className="border-b border-ink-50 hover:bg-ink-50"
+                >
+                  <td className="px-5 py-3 font-medium text-ink-800">
+                    {n.title}
+                  </td>
+                  <td className="px-2 py-3">
+                    <Badge tone={n.type === "이벤트" ? "purple" : "blue"}>
+                      {n.type}
+                    </Badge>
+                  </td>
                   <td className="px-2 py-3 text-ink-400 text-xs">{n.period}</td>
-                  <td className="px-2 py-3"><Badge tone={statusTone[n.status]}>{n.status}</Badge></td>
+                  <td className="px-2 py-3">
+                    <Badge tone={statusTone[n.status]}>{n.status}</Badge>
+                  </td>
                   <td className="px-2 py-3 text-ink-600">{n.views}</td>
                   <td className="px-5 py-3 text-ink-400">···</td>
                 </tr>
@@ -113,7 +124,12 @@ export default function NewsPage() {
         <div className="flex items-center justify-center gap-2 px-5 py-4 text-sm text-ink-500">
           <button className="px-2">‹</button>
           {[1, 2, 3, 4].map((p) => (
-            <button key={p} className={`w-7 h-7 rounded-md ${p === 1 ? "bg-brand-600 text-white" : "hover:bg-ink-100"}`}>{p}</button>
+            <button
+              key={p}
+              className={`w-7 h-7 rounded-md ${p === 1 ? "bg-brand-600 text-white" : "hover:bg-ink-100"}`}
+            >
+              {p}
+            </button>
           ))}
           <span>…</span>
           <button className="w-7 h-7 rounded-md hover:bg-ink-100">7</button>
