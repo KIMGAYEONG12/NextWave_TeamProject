@@ -1,122 +1,115 @@
 "use client";
-import { useState } from "react";
-import PageHeader from "@/components/PageHeader";
-import Card from "@/components/Card";
-import Button from "@/components/Button";
-import Badge from "@/components/Badge";
-import Icon from "@/components/icons";
-import { useToast } from "@/components/Toast";
-import { todayReservations as initialReservations } from "@/lib/mock-data";
 
-const weeks = [
-  [27, 28, 29, 30, 31, 1, 2],
-  [3, 4, 5, 6, 7, 8, 9],
-  [10, 11, 12, 13, 14, 15, 16],
-  [17, 18, 19, 20, 21, 22, 23],
-  [24, 25, 26, 27, 28, 29, 30],
-];
-const dayNames = ["일", "월", "화", "수", "목", "금", "토"];
-const reservedDays: Record<number, number> = {
-  3: 2,
-  4: 1,
-  5: 3,
-  6: 2,
-  7: 5,
-  10: 1,
-};
+import { useMemo, useState } from "react";
+import { ChevronLeft, ChevronRight, Plus, X, Check, Crown } from "lucide-react";
+import { PageHeader, StatusBadge } from "@/components/ui";
+import { reservations as initialReservations, reservationCounts, Reservation } from "@/lib/data";
+
+const WEEKDAYS = ["일", "월", "화", "수", "목", "금", "토"];
+
+function buildMonthGrid(year: number, month: number) {
+  // month: 0-indexed
+  const firstDay = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const daysInPrevMonth = new Date(year, month, 0).getDate();
+  const cells: { day: number; current: boolean; dateKey: string }[] = [];
+
+  for (let i = firstDay - 1; i >= 0; i--) {
+    cells.push({ day: daysInPrevMonth - i, current: false, dateKey: "" });
+  }
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dateKey = `${year}-${String(month + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
+    cells.push({ day: d, current: true, dateKey });
+  }
+  while (cells.length % 7 !== 0) {
+    cells.push({ day: cells.length - (firstDay + daysInMonth) + 1, current: false, dateKey: "" });
+  }
+  return cells;
+}
 
 export default function ReservationsPage() {
-  const { show } = useToast();
-  const [selectedDay, setSelectedDay] = useState(7);
-  const [reservations, setReservations] = useState(initialReservations);
-  const [selectedTime, setSelectedTime] = useState(initialReservations[0].time);
+  const [year] = useState(2026);
+  const [month, setMonth] = useState(7); // August = index 7
+  const [selectedDate, setSelectedDate] = useState("2026-08-07");
+  const [reservations, setReservations] = useState<Reservation[]>(initialReservations);
+  const [selected, setSelected] = useState<Reservation>(initialReservations[0]);
+  const [showProModal, setShowProModal] = useState(false);
 
-  const selected =
-    reservations.find((r) => r.time === selectedTime) ?? reservations[0];
+  const cells = useMemo(() => buildMonthGrid(year, month), [year, month]);
+  const dayReservations = reservations.filter((r) => r.date === selectedDate);
 
-  const updateStatus = (status: "승인" | "거절") => {
-    setReservations((prev) =>
-      prev.map((r) => (r.time === selected.time ? { ...r, status } : r)),
-    );
-    show(
-      status === "승인"
-        ? `${selected.time} ${selected.name}님 예약이 승인되었습니다.`
-        : `${selected.time} ${selected.name}님 예약이 거절되었습니다.`,
-      status === "승인" ? "success" : "error",
-    );
+  const setStatus = (status: Reservation["status"]) => {
+    setReservations((prev) => prev.map((r) => (r.id === selected.id ? { ...r, status } : r)));
+    setSelected((s) => ({ ...s, status }));
   };
 
   return (
-    <div className="p-6 md:p-8 max-w-[1400px] mx-auto">
+    <div>
       <PageHeader
         title="예약 관리"
-        subtitle="예약 현황을 확인하고 승인/거절을 관리하세요."
+        desc="예약 현황을 확인하고 승인/거절을 관리하세요."
         action={
-          <Button size="md">
-            <Icon name="plus" className="w-4 h-4" /> 예약 추가
-          </Button>
+          <>
+            <button onClick={() => setShowProModal(true)} className="btn-secondary">
+              <Crown size={15} className="text-amber-500" /> 프로 기능 더 보기
+            </button>
+            <button className="btn-primary">
+              <Plus size={16} /> 예약 추가
+            </button>
+          </>
         }
       />
 
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-5">
-        <Card>
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-3">
-              <button className="p-1 text-ink-400 hover:text-ink-700">
-                <Icon name="chevronLeft" className="w-5 h-5" />
+      <div className="grid grid-cols-1 gap-5 xl:grid-cols-[1fr_360px]">
+        {/* calendar */}
+        <div className="card p-5">
+          <div className="mb-4 flex items-center justify-between">
+            <h3 className="text-lg font-bold text-slate-900">
+              {year}년 {month + 1}월
+            </h3>
+            <div className="flex items-center gap-1">
+              <button
+                onClick={() => setMonth((m) => Math.max(0, m - 1))}
+                className="rounded-lg border border-slate-200 p-1.5 hover:bg-slate-50"
+              >
+                <ChevronLeft size={16} />
               </button>
-              <h3 className="text-base font-semibold text-ink-900">
-                2026년 8월
-              </h3>
-              <button className="p-1 text-ink-400 hover:text-ink-700">
-                <Icon name="chevronRight" className="w-5 h-5" />
+              <button
+                onClick={() => setMonth((m) => Math.min(11, m + 1))}
+                className="rounded-lg border border-slate-200 p-1.5 hover:bg-slate-50"
+              >
+                <ChevronRight size={16} />
               </button>
-            </div>
-            <div className="flex bg-ink-100 rounded-lg p-0.5 text-xs">
-              {["일", "주", "월"].map((v, i) => (
-                <button
-                  key={v}
-                  className={`px-3 py-1.5 rounded-md ${i === 2 ? "bg-white shadow-card text-ink-800 font-medium" : "text-ink-500"}`}
-                >
-                  {v}
-                </button>
-              ))}
             </div>
           </div>
-          <div className="grid grid-cols-7 text-center text-xs text-ink-400 mb-2">
-            {dayNames.map((d) => (
-              <div key={d} className="py-1">
-                {d}
+
+          <div className="grid grid-cols-7 gap-2">
+            {WEEKDAYS.map((w) => (
+              <div key={w} className="pb-1 text-center text-xs font-semibold text-slate-400">
+                {w}
               </div>
             ))}
-          </div>
-          <div className="grid grid-cols-7 gap-1.5">
-            {weeks.flat().map((d, i) => {
-              const isCurrentMonth = i >= 5 && i < 5 + 31;
-              const count =
-                reservedDays[d] && isCurrentMonth ? reservedDays[d] : 0;
-              const isSelected = isCurrentMonth && d === selectedDay;
+            {cells.map((c, idx) => {
+              const count = c.current ? reservationCounts[c.dateKey] ?? 0 : 0;
+              const isSelected = c.current && c.dateKey === selectedDate;
               return (
                 <button
-                  key={i}
-                  onClick={() => isCurrentMonth && setSelectedDay(d)}
-                  className={`aspect-square rounded-lg border text-left p-1.5 text-xs transition-colors ${
-                    isSelected
-                      ? "border-brand-500 bg-brand-50"
-                      : "border-ink-100 hover:border-ink-200"
-                  } ${!isCurrentMonth ? "opacity-30" : ""}`}
+                  key={idx}
+                  disabled={!c.current}
+                  onClick={() => c.current && setSelectedDate(c.dateKey)}
+                  className={`flex h-24 flex-col items-start gap-1.5 rounded-xl border p-2 text-left transition ${
+                    !c.current
+                      ? "border-transparent text-slate-300"
+                      : isSelected
+                      ? "border-brand-400 bg-brand-50 ring-2 ring-brand-100"
+                      : "border-slate-100 hover:bg-slate-50"
+                  }`}
                 >
-                  <span
-                    className={
-                      isSelected
-                        ? "text-brand-700 font-semibold"
-                        : "text-ink-600"
-                    }
-                  >
-                    {d}
+                  <span className={`text-sm font-semibold ${isSelected ? "text-brand-700" : "text-slate-600"}`}>
+                    {c.day}
                   </span>
                   {count > 0 && (
-                    <span className="block mt-1 text-[10px] bg-brand-100 text-brand-700 rounded px-1 py-0.5 w-fit">
+                    <span className="rounded-md bg-brand-100 px-1.5 py-0.5 text-[11px] font-semibold text-brand-700">
                       예약 {count}
                     </span>
                   )}
@@ -124,117 +117,127 @@ export default function ReservationsPage() {
               );
             })}
           </div>
-        </Card>
+        </div>
 
-        <Card>
-          <h3 className="text-sm font-semibold text-ink-800 mb-3">
-            8월 {selectedDay}일 예약 목록
-          </h3>
-          <div className="space-y-2">
-            {reservations.map((r) => (
-              <button
-                key={r.time}
-                onClick={() => setSelectedTime(r.time)}
-                className={`w-full flex items-center justify-between rounded-lg border px-3 py-2.5 text-left ${
-                  selected.time === r.time
-                    ? "border-brand-400 bg-brand-50/50"
-                    : "border-ink-100 hover:border-ink-200"
-                }`}
-              >
-                <div>
-                  <p className="text-sm font-medium text-ink-800">
-                    {r.time} · {r.name}
-                  </p>
-                  <p className="text-xs text-ink-400">{r.people}명</p>
-                </div>
-                <Badge
-                  tone={
-                    r.status === "승인"
-                      ? "green"
-                      : r.status === "거절"
-                        ? "red"
-                        : "amber"
-                  }
+        {/* side: day list + detail */}
+        <div className="space-y-5">
+          <div className="card p-4">
+            <h3 className="mb-3 px-1 text-sm font-bold text-slate-900">
+              {month + 1}월 {Number(selectedDate.split("-")[2])}일 예약 목록
+            </h3>
+            <div className="space-y-2">
+              {dayReservations.length === 0 && (
+                <p className="px-1 py-6 text-center text-sm text-slate-400">예약이 없습니다.</p>
+              )}
+              {dayReservations.map((r) => (
+                <button
+                  key={r.id}
+                  onClick={() => setSelected(r)}
+                  className={`flex w-full items-center justify-between rounded-xl border p-3 text-left transition ${
+                    selected.id === r.id ? "border-brand-300 bg-brand-50" : "border-slate-100 hover:bg-slate-50"
+                  }`}
                 >
-                  {r.status}
-                </Badge>
-              </button>
-            ))}
-          </div>
-
-          <div className="mt-5 pt-5 border-t border-ink-100">
-            <h4 className="text-sm font-semibold text-ink-800 mb-3">
-              예약 상세
-            </h4>
-            <dl className="space-y-2.5 text-sm">
-              <div className="flex justify-between">
-                <dt className="text-ink-500">예약 번호</dt>
-                <dd className="text-ink-800">R-20260807-015</dd>
-              </div>
-              <div className="flex justify-between">
-                <dt className="text-ink-500">예약 고객</dt>
-                <dd className="text-ink-800">
-                  {selected.name} (010-1234-5678)
-                </dd>
-              </div>
-              <div className="flex justify-between">
-                <dt className="text-ink-500">예약 일시</dt>
-                <dd className="text-ink-800">
-                  2026.08.{String(selectedDay).padStart(2, "0")} (금){" "}
-                  {selected.time}
-                </dd>
-              </div>
-              <div className="flex justify-between">
-                <dt className="text-ink-500">인원</dt>
-                <dd className="text-ink-800">{selected.people}명</dd>
-              </div>
-              <div className="flex justify-between">
-                <dt className="text-ink-500">좌석</dt>
-                <dd className="text-ink-800">창가 자리</dd>
-              </div>
-              <div className="flex justify-between">
-                <dt className="text-ink-500">요청 사항</dt>
-                <dd className="text-ink-800 text-right">
-                  조용한 자리 부탁드려요.
-                </dd>
-              </div>
-              <div className="flex justify-between">
-                <dt className="text-ink-500">현재 상태</dt>
-                <dd>
-                  <Badge
-                    tone={
-                      selected.status === "승인"
-                        ? "green"
-                        : selected.status === "거절"
-                          ? "red"
-                          : "amber"
-                    }
-                  >
-                    {selected.status}
-                  </Badge>
-                </dd>
-              </div>
-            </dl>
-            <div className="flex gap-2 mt-4">
-              <Button
-                variant="outline"
-                className="flex-1"
-                disabled={selected.status === "거절"}
-                onClick={() => updateStatus("거절")}
-              >
-                거절
-              </Button>
-              <Button
-                className="flex-1"
-                disabled={selected.status === "승인"}
-                onClick={() => updateStatus("승인")}
-              >
-                승인하기
-              </Button>
+                  <div>
+                    <p className="text-sm font-semibold text-slate-800">
+                      {r.time} · {r.name}
+                    </p>
+                    <p className="text-xs text-slate-400">{r.people}명</p>
+                  </div>
+                  <StatusBadge status={r.status} />
+                </button>
+              ))}
             </div>
           </div>
-        </Card>
+
+          {dayReservations.length > 0 && (
+            <div className="card p-5">
+              <h3 className="mb-3 text-sm font-bold text-slate-900">예약 상세</h3>
+              <dl className="space-y-2.5 text-sm">
+                <Row label="예약 번호" value={selected.id} />
+                <Row label="예약 고객" value={`${selected.name} (${selected.phone})`} />
+                <Row label="예약 일시" value={`${selected.date} ${selected.time}`} />
+                <Row label="인원" value={`${selected.people}명`} />
+                <Row label="좌석" value={selected.seat} />
+                <Row label="요청 사항" value={selected.request} />
+                <div className="flex items-center justify-between pt-1">
+                  <dt className="text-slate-500">현재 상태</dt>
+                  <dd>
+                    <StatusBadge status={selected.status} />
+                  </dd>
+                </div>
+              </dl>
+              <div className="mt-4 flex gap-2">
+                <button
+                  onClick={() => setStatus("거절")}
+                  className="btn-secondary flex-1 !border-red-200 !text-red-600 hover:!bg-red-50"
+                >
+                  거절
+                </button>
+                <button onClick={() => setStatus("승인")} className="btn-primary flex-1">
+                  승인하기
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
+
+      {showProModal && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
+          {/* opaque backdrop fully covers the calendar behind — prevents any text bleed-through */}
+          <div className="absolute inset-0 bg-slate-900/60" onClick={() => setShowProModal(false)} />
+          <div className="relative z-10 max-h-[85vh] w-full max-w-lg overflow-y-auto rounded-2xl bg-white p-6 shadow-popover">
+            <div className="mb-4 flex items-center justify-between">
+              <h3 className="text-lg font-bold text-slate-900">프로 기능 더 보기</h3>
+              <button onClick={() => setShowProModal(false)} className="rounded-lg p-1 text-slate-400 hover:bg-slate-100">
+                <X size={18} />
+              </button>
+            </div>
+            <p className="mb-5 text-sm leading-relaxed text-slate-500">
+              현재 <span className="font-semibold text-slate-700">프로페셔널</span> 요금제에서 이용 중인 기능과, 상위
+              요금제에서 추가로 이용할 수 있는 기능입니다.
+            </p>
+
+            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-400">프로페셔널 포함 기능</p>
+            <ul className="mb-5 space-y-2">
+              {["모든 기본 기능", "고급 매출 분석", "예약 관리", "멤버십(포인트, 쿠폰)", "마케팅 기능(쿠폰, 알림)", "블로그(CMS)", "SEO 관리", "우선 고객 지원"].map(
+                (f) => (
+                  <li key={f} className="flex items-center gap-2 text-sm text-slate-700">
+                    <Check size={15} className="text-brand-600" /> {f}
+                  </li>
+                )
+              )}
+            </ul>
+
+            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-400">엔터프라이즈로 업그레이드 시</p>
+            <ul className="mb-6 space-y-2">
+              {["무제한 데이터", "전담 지원", "맞춤 기능"].map((f) => (
+                <li key={f} className="flex items-center gap-2 text-sm text-slate-400">
+                  <Check size={15} className="text-slate-300" /> {f}
+                </li>
+              ))}
+            </ul>
+
+            <div className="flex justify-end gap-2">
+              <button onClick={() => setShowProModal(false)} className="btn-secondary">
+                닫기
+              </button>
+              <a href="/billing" className="btn-primary">
+                요금제 관리로 이동
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function Row({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex justify-between gap-4">
+      <dt className="shrink-0 text-slate-500">{label}</dt>
+      <dd className="text-right font-medium text-slate-800">{value}</dd>
     </div>
   );
 }

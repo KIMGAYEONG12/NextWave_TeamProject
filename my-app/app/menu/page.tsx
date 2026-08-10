@@ -1,196 +1,202 @@
 "use client";
-import { useState } from "react";
-import PageHeader from "@/components/PageHeader";
-import Card from "@/components/Card";
-import Input from "@/components/Input";
-import Select from "@/components/Select";
-import Button from "@/components/Button";
-import Badge from "@/components/Badge";
-import Icon from "@/components/icons";
-import { menuItems } from "@/lib/mock-data";
 
-const categories = [
-  "전체",
-  "커피",
-  "논커피",
-  "티",
-  "디저트",
-  "베이커리",
-  "시즌메뉴",
-];
+import { useMemo, useState } from "react";
+import { Plus, Search, Pencil, Trash2, PackageCheck, PackageX, AlertTriangle } from "lucide-react";
+import { PageHeader, StatusBadge } from "@/components/ui";
+import { menuItems, menuCategories, stockSummary, recentOrdersToStock, MenuItem } from "@/lib/data";
 
 export default function MenuPage() {
-  const [activeCat, setActiveCat] = useState("전체");
+  const [category, setCategory] = useState("전체");
   const [query, setQuery] = useState("");
-  const [selected, setSelected] = useState(menuItems[0]);
-  const [available, setAvailable] = useState(true);
+  const [selected, setSelected] = useState<MenuItem>(menuItems[0]);
+  const [items, setItems] = useState(menuItems);
 
-  const filtered = menuItems.filter((m) => {
-    const matchCat = activeCat === "전체" || m.category === activeCat;
-    const matchQuery = m.name.toLowerCase().includes(query.toLowerCase());
-    return matchCat && matchQuery;
-  });
+  const filtered = useMemo(
+    () =>
+      items.filter(
+        (m) =>
+          (category === "전체" || m.category === category) &&
+          m.name.toLowerCase().includes(query.toLowerCase())
+      ),
+    [items, category, query]
+  );
+
+  const toggleVisible = (id: string) =>
+    setItems((prev) => prev.map((m) => (m.id === id ? { ...m, visible: !m.visible } : m)));
 
   return (
-    <div className="p-6 md:p-8 max-w-[1400px] mx-auto">
+    <div>
       <PageHeader
         title="메뉴·재고 관리"
-        subtitle="메뉴를 관리하고 주요 재고 현황을 확인하세요."
+        desc="메뉴를 관리하고 주요 재고 현황을 확인하세요."
         action={
-          <Button size="md">
-            <Icon name="plus" className="w-4 h-4" /> 메뉴 추가
-          </Button>
+          <button className="btn-primary">
+            <Plus size={16} /> 메뉴 추가
+          </button>
         }
       />
 
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-5">
-        <Card padded={false} className="overflow-hidden">
-          <div className="flex flex-wrap items-center gap-4 px-5 pt-4">
-            {categories.map((c) => (
-              <button
-                key={c}
-                onClick={() => setActiveCat(c)}
-                className={`pb-3 text-sm border-b-2 -mb-px ${
-                  activeCat === c
-                    ? "border-brand-600 text-brand-600 font-semibold"
-                    : "border-transparent text-ink-500 hover:text-ink-800"
-                }`}
-              >
-                {c}
-              </button>
-            ))}
-          </div>
-          <div className="border-t border-ink-100" />
-          <div className="flex items-center gap-3 px-5 py-3">
-            <div className="flex-1">
-              <Input
-                icon="search"
-                placeholder="메뉴명 검색"
+      <div className="grid grid-cols-1 gap-5 xl:grid-cols-[220px_1fr_320px]">
+        {/* category sidebar */}
+        <div className="card h-fit p-3">
+          {menuCategories.map((c) => (
+            <button
+              key={c}
+              onClick={() => setCategory(c)}
+              className={`mb-1 w-full rounded-xl px-3.5 py-2.5 text-left text-sm font-medium transition ${
+                category === c ? "bg-brand-50 text-brand-700" : "text-slate-600 hover:bg-slate-50"
+              }`}
+            >
+              {c}
+              <span className="ml-1 text-xs text-slate-400">
+                ({c === "전체" ? items.length : items.filter((i) => i.category === c).length})
+              </span>
+            </button>
+          ))}
+        </div>
+
+        {/* list */}
+        <div>
+          <div className="mb-4 flex items-center gap-2">
+            <div className="relative flex-1">
+              <Search size={15} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+              <input
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
+                placeholder="메뉴명 검색"
+                className="input pl-9"
               />
             </div>
-            <Select className="w-40" defaultValue="all">
-              <option value="all">전체 상태</option>
-              <option value="ok">판매중</option>
-              <option value="out">품절</option>
-            </Select>
+            <select className="input w-36">
+              <option>전체 상태</option>
+              <option>정상</option>
+              <option>부족</option>
+              <option>품절</option>
+            </select>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 px-5 pb-5">
-            {filtered.map((item) => (
+
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+            {filtered.map((m) => (
               <button
-                key={item.id}
-                onClick={() => setSelected(item)}
-                className={`text-left rounded-xl border p-3 transition-colors ${
-                  selected.id === item.id
-                    ? "border-brand-400 ring-2 ring-brand-100 bg-brand-50/40"
-                    : "border-ink-100 hover:border-ink-200"
+                key={m.id}
+                onClick={() => setSelected(m)}
+                className={`card flex flex-col items-start gap-1.5 p-4 text-left transition hover:-translate-y-0.5 ${
+                  selected.id === m.id ? "ring-2 ring-brand-400" : ""
                 }`}
               >
-                <div className="w-full aspect-square rounded-lg bg-ink-50 flex items-center justify-center text-3xl mb-2">
-                  {item.img}
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-50 text-2xl">
+                  {m.image}
                 </div>
-                <p className="text-sm font-medium text-ink-800 truncate">
-                  {item.name}
-                </p>
-                <p className="text-xs text-ink-400">
-                  {item.price.toLocaleString()}원
-                </p>
-                <Badge
-                  tone={
-                    item.stockLevel === "ok"
-                      ? "green"
-                      : item.stockLevel === "low"
-                        ? "amber"
-                        : "red"
-                  }
-                  className="mt-1.5"
-                >
-                  재고: {item.stock}
-                </Badge>
+                <p className="mt-1 text-sm font-semibold text-slate-800">{m.name}</p>
+                <p className="text-sm font-bold text-brand-600">{m.price.toLocaleString()}원</p>
+                <div className="flex items-center gap-1">
+                  <StatusBadge status={m.stockStatus} />
+                  <span className="text-[11px] text-slate-400">재고: {m.stockQty}</span>
+                </div>
               </button>
             ))}
+            {filtered.length === 0 && (
+              <p className="col-span-full py-10 text-center text-sm text-slate-400">검색 결과가 없습니다.</p>
+            )}
           </div>
-        </Card>
+        </div>
 
-        <Card>
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-base font-semibold text-ink-900 flex items-center gap-2">
-              <span className="text-2xl">{selected.img}</span> {selected.name}
+        {/* detail */}
+        <div className="card h-fit p-5">
+          <div className="mb-4 flex items-center justify-between">
+            <h3 className="flex items-center gap-2 text-base font-bold text-slate-900">
+              <span className="text-xl">{selected.image}</span> {selected.name}
             </h3>
-            <label className="inline-flex items-center gap-2 cursor-pointer">
-              <span className="text-xs text-ink-500">판매중</span>
+            <button
+              onClick={() => toggleVisible(selected.id)}
+              className={`relative h-6 w-11 rounded-full transition ${selected.visible ? "bg-brand-600" : "bg-slate-200"}`}
+            >
               <span
-                onClick={() => setAvailable((v) => !v)}
-                className={`w-9 h-5 rounded-full relative transition-colors ${
-                  available ? "bg-brand-600" : "bg-ink-200"
+                className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition ${
+                  selected.visible ? "left-[22px]" : "left-0.5"
                 }`}
-              >
-                <span
-                  className={`absolute top-0.5 w-4 h-4 rounded-full bg-white transition-transform ${
-                    available ? "translate-x-4" : "translate-x-0.5"
-                  }`}
-                />
-              </span>
-            </label>
+              />
+            </button>
           </div>
 
-          <p className="text-xs font-semibold text-ink-400 mb-2">기본 정보</p>
-          <div className="space-y-3 mb-5">
+          <p className="mb-4 text-xs font-semibold uppercase text-slate-400">기본 정보</p>
+          <div className="space-y-3 text-sm">
             <div>
-              <label className="text-xs text-ink-500 mb-1 block">
-                카테고리
-              </label>
-              <Select defaultValue={selected.category}>
-                {categories.slice(1).map((c) => (
+              <label className="mb-1 block text-xs text-slate-500">카테고리</label>
+              <select className="input" defaultValue={selected.category}>
+                {menuCategories.slice(1).map((c) => (
                   <option key={c}>{c}</option>
                 ))}
-              </Select>
+              </select>
             </div>
             <div>
-              <label className="text-xs text-ink-500 mb-1 block">
-                판매 가격
-              </label>
-              <Input defaultValue={selected.price} type="number" />
+              <label className="mb-1 block text-xs text-slate-500">판매 가격</label>
+              <input className="input" defaultValue={selected.price} />
             </div>
             <div>
-              <label className="text-xs text-ink-500 mb-1 block">
-                메뉴 설명
-              </label>
-              <textarea
-                className="w-full rounded-lg border border-ink-200 text-sm px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-200"
-                rows={2}
-                defaultValue={`고소한 원두 향이 살아있는 ${selected.name}입니다.`}
-              />
+              <label className="mb-1 block text-xs text-slate-500">메뉴 설명</label>
+              <textarea className="input" rows={2} defaultValue={selected.desc} />
             </div>
           </div>
 
-          <p className="text-xs font-semibold text-ink-400 mb-2">재고 정보</p>
-          <div className="space-y-3 mb-6">
+          <p className="mb-3 mt-5 text-xs font-semibold uppercase text-slate-400">재고 정보</p>
+          <div className="space-y-3 text-sm">
             <div>
-              <label className="text-xs text-ink-500 mb-1 block">
-                재고 설정
-              </label>
-              <Select defaultValue="track">
-                <option value="track">추적함</option>
-                <option value="none">추적안함</option>
-              </Select>
+              <label className="mb-1 block text-xs text-slate-500">재고 설정</label>
+              <select className="input" defaultValue={selected.stockQty === "무제한" ? "무제한" : "관리함"}>
+                <option>무제한</option>
+                <option>관리함</option>
+              </select>
             </div>
-            <div>
-              <label className="text-xs text-ink-500 mb-1 block">
-                현재 재고
-              </label>
-              <Input defaultValue={selected.stock} />
+            <div className="flex justify-between text-xs text-slate-500">
+              <span>현재 재고</span>
+              <span className="font-semibold text-slate-700">{selected.stockQty}</span>
             </div>
           </div>
 
-          <div className="flex gap-2">
-            <Button className="flex-1">수정</Button>
-            <Button variant="danger" className="flex-1">
-              삭제
-            </Button>
+          <div className="mt-5 flex gap-2">
+            <button className="btn-primary flex-1">
+              <Pencil size={14} /> 수정
+            </button>
+            <button className="btn-secondary flex-1 !border-red-200 !text-red-600 hover:!bg-red-50">
+              <Trash2 size={14} /> 삭제
+            </button>
           </div>
-        </Card>
+        </div>
+      </div>
+
+      <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="card flex items-center gap-3 p-4">
+          <PackageCheck className="text-emerald-500" size={22} />
+          <div>
+            <p className="text-xs text-slate-500">정상 재고</p>
+            <p className="font-bold text-slate-800">{stockSummary.normal}개</p>
+          </div>
+        </div>
+        <div className="card flex items-center gap-3 p-4">
+          <AlertTriangle className="text-amber-500" size={22} />
+          <div>
+            <p className="text-xs text-slate-500">부족 재고</p>
+            <p className="font-bold text-slate-800">{stockSummary.low}개</p>
+          </div>
+        </div>
+        <div className="card flex items-center gap-3 p-4">
+          <PackageX className="text-red-500" size={22} />
+          <div>
+            <p className="text-xs text-slate-500">품절</p>
+            <p className="font-bold text-slate-800">{stockSummary.out}개</p>
+          </div>
+        </div>
+        <div className="card p-4">
+          <p className="mb-2 text-xs font-semibold text-slate-500">최근 발주 내역</p>
+          <div className="space-y-1">
+            {recentOrdersToStock.map((o, i) => (
+              <p key={i} className="text-xs text-slate-500">
+                <span className="text-slate-400">{o.date}</span> {o.item}
+              </p>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );

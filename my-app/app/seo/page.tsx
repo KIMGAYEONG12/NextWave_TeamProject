@@ -1,148 +1,117 @@
 "use client";
-import { useState } from "react";
-import PageHeader from "@/components/PageHeader";
-import Card from "@/components/Card";
-import StoreTabs from "@/components/StoreTabs";
-import Input from "@/components/Input";
-import Button from "@/components/Button";
-import Badge from "@/components/Badge";
 
-type TabKey = "basic" | "keyword" | "meta" | "sitemap";
+import { useState } from "react";
+import { Eye, Star, CheckCircle2 } from "lucide-react";
+import { PageHeader } from "@/components/ui";
+import { seoInfo, seoScores, lastCrawl } from "@/lib/data";
+
+const tabs = ["기본 정보", "키워드 관리", "메타 태그", "사이트맵"] as const;
 
 export default function SeoPage() {
-  const [tab, setTab] = useState<TabKey>("basic");
+  const [tab, setTab] = useState<(typeof tabs)[number]>("기본 정보");
+  const [info, setInfo] = useState(seoInfo);
 
   return (
-    <div className="p-6 md:p-8 max-w-[1400px] mx-auto">
+    <div>
       <PageHeader
         title="SEO 노출 관리"
-        subtitle="검색 엔진 노출을 최적화하고 매장 정보를 관리하세요."
+        desc="검색 엔진 노출을 최적화하고 매장 정보를 관리하세요."
+        action={
+          <button className="btn-secondary">
+            <Eye size={15} /> 미리보기
+          </button>
+        }
       />
 
-      <div className="mb-5">
-        <StoreTabs
-          tabs={[
-            { key: "basic", label: "기본 정보" },
-            { key: "keyword", label: "키워드 관리" },
-            { key: "meta", label: "메타 태그" },
-            { key: "sitemap", label: "사이트맵" },
-          ]}
-          active={tab}
-          onChange={setTab}
-        />
-      </div>
+      <div className="grid grid-cols-1 gap-5 xl:grid-cols-[1fr_340px]">
+        <div className="card p-5">
+          <div className="mb-4 flex flex-wrap gap-2">
+            {tabs.map((t) => (
+              <button
+                key={t}
+                onClick={() => setTab(t)}
+                className={`rounded-lg px-3 py-1.5 text-sm font-medium ${
+                  tab === t ? "bg-brand-600 text-white" : "bg-slate-50 text-slate-500 hover:bg-slate-100"
+                }`}
+              >
+                {t}
+              </button>
+            ))}
+          </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-5">
-        <div className="space-y-5">
-          <Card>
-            <h3 className="text-sm font-semibold text-ink-800 mb-4">
-              검색 노출 미리보기
-            </h3>
-            <div className="rounded-xl border border-ink-100 p-4 bg-ink-50">
-              <p className="text-xs text-emerald-700">https://cafeon.co.kr</p>
-              <p className="text-base text-brand-700 font-medium mt-0.5">
-                cafeON - 수제 커피와 디저트를 맛있는 공간
-              </p>
-              <p className="text-xs text-ink-500 mt-1">
-                cafeON은 신선한 원두와 정성으로 만든 커피, 디저트를 제공하는
-                특별한 카페입니다. 평점: 4.7 · 리뷰 152개 · 영업중 · 08:00 ~
-                21:00
-              </p>
-            </div>
-          </Card>
-          <Card>
-            <h3 className="text-sm font-semibold text-ink-800 mb-4">
-              기본 정보
-            </h3>
-            <div className="space-y-3">
-              <div>
-                <label className="text-xs text-ink-500 mb-1 block">
-                  매장명
-                </label>
-                <Input defaultValue="cafeON" />
+          {tab === "기본 정보" && (
+            <>
+              <div className="mb-5 rounded-xl border border-slate-100 bg-slate-50 p-4">
+                <p className="mb-1 text-xs text-slate-400">검색 노출 미리보기</p>
+                <p className="text-sm text-brand-700">{info.url}</p>
+                <p className="mt-0.5 text-base font-medium text-blue-700">{info.title}</p>
+                <p className="mt-0.5 text-sm text-slate-500">{info.desc}</p>
+                <p className="mt-1 text-xs text-slate-400">
+                  평점: {info.rating} · 리뷰 {info.reviewCount}개 · 영업중 · {info.hours}
+                </p>
               </div>
-              <div>
-                <label className="text-xs text-ink-500 mb-1 block">설명</label>
-                <Input defaultValue="수제 커피와 디저트가 있는 공간, cafeON입니다." />
-              </div>
-              <div>
-                <label className="text-xs text-ink-500 mb-1 block">주소</label>
-                <Input defaultValue="서울특별시 강남구 테헤란로 123-4" />
-              </div>
-              <div>
-                <label className="text-xs text-ink-500 mb-1 block">
-                  전화번호
-                </label>
-                <Input defaultValue="02-1234-5678" />
-              </div>
-              <div>
-                <label className="text-xs text-ink-500 mb-1 block">
-                  대표 이미지
-                </label>
-                <div className="flex items-center gap-3">
-                  <div className="w-16 h-16 rounded-lg bg-ink-100 flex items-center justify-center text-2xl">
-                    ☕
-                  </div>
-                  <Button variant="outline" size="sm">
-                    이미지 변경
-                  </Button>
+
+              <div className="space-y-3">
+                <div>
+                  <label className="mb-1 block text-xs text-slate-500">매장명</label>
+                  <input className="input" value={info.title.split(" – ")[0]} readOnly />
+                </div>
+                <div>
+                  <label className="mb-1 block text-xs text-slate-500">설명</label>
+                  <textarea className="input" rows={2} value={info.desc} onChange={(e) => setInfo({ ...info, desc: e.target.value })} />
+                </div>
+                <div>
+                  <label className="mb-1 block text-xs text-slate-500">주소</label>
+                  <input className="input" value={info.address} onChange={(e) => setInfo({ ...info, address: e.target.value })} />
+                </div>
+                <div>
+                  <label className="mb-1 block text-xs text-slate-500">전화번호</label>
+                  <input className="input" value={info.phone} onChange={(e) => setInfo({ ...info, phone: e.target.value })} />
+                </div>
+                <div>
+                  <label className="mb-1 block text-xs text-slate-500">대표 이미지</label>
+                  <button className="btn-secondary">이미지 변경</button>
                 </div>
               </div>
-            </div>
-            <Button className="mt-5">저장하기</Button>
-          </Card>
+              <button className="btn-primary mt-5">저장</button>
+            </>
+          )}
+
+          {tab !== "기본 정보" && (
+            <p className="py-16 text-center text-sm text-slate-400">{tab} 설정 화면입니다. 준비 중인 세부 옵션이 이어집니다.</p>
+          )}
         </div>
 
         <div className="space-y-5">
-          <Card>
-            <h3 className="text-sm font-semibold text-ink-800 mb-4">
-              노출 현황
-            </h3>
-            <dl className="space-y-3 text-sm">
-              <div className="flex justify-between items-center">
-                <dt className="text-ink-500">검색 노출 상태</dt>
-                <dd>
-                  <Badge tone="green">우수</Badge>
-                </dd>
-              </div>
-              <div className="flex justify-between items-center">
-                <dt className="text-ink-500">색인 등록 상태</dt>
-                <dd>
-                  <Badge tone="green">색인됨</Badge>
-                </dd>
-              </div>
-              <div className="flex justify-between items-center">
-                <dt className="text-ink-500">모바일 친화도</dt>
-                <dd>
-                  <Badge tone="green">우수</Badge>
-                </dd>
-              </div>
-              <div className="flex justify-between items-center">
-                <dt className="text-ink-500">페이지 로딩 속도</dt>
-                <dd>
-                  <Badge tone="blue">빠름</Badge>
-                </dd>
-              </div>
+          <div className="card p-5">
+            <h3 className="mb-3 font-bold text-slate-900">노출 현황</h3>
+            <dl className="space-y-2.5 text-sm">
+              {Object.entries(seoScores).map(([k, v]) => (
+                <div key={k} className="flex items-center justify-between">
+                  <dt className="text-slate-500">
+                    {k === "exposure" ? "검색 노출 상태" : k === "registration" ? "네이버 등록 상태" : k === "mobile" ? "모바일 친화도" : "페이지 로딩 속도"}
+                  </dt>
+                  <dd className="flex items-center gap-1 font-semibold text-emerald-600">
+                    <CheckCircle2 size={14} /> {v}
+                  </dd>
+                </div>
+              ))}
             </dl>
-            <a
-              href="#"
-              className="mt-4 inline-block text-xs text-brand-600 font-medium"
-            >
+            <a href="#" className="mt-3 inline-block text-xs font-medium text-brand-600">
               상세 분석 보기 →
             </a>
-          </Card>
-          <Card>
-            <h3 className="text-sm font-semibold text-ink-800 mb-3">
-              최근 크롤링
-            </h3>
+          </div>
+
+          <div className="card p-5">
+            <h3 className="mb-3 font-bold text-slate-900">최근 크롤링</h3>
             <div className="flex items-center justify-between text-sm">
-              <span className="text-ink-500">2026.08.06 14:32</span>
-              <Badge tone="green">성공</Badge>
+              <span className="text-slate-500">{lastCrawl.time}</span>
+              <span className="flex items-center gap-1 font-semibold text-emerald-600">
+                <Star size={13} className="fill-emerald-500 text-emerald-500" /> {lastCrawl.status}
+              </span>
             </div>
-            <Button variant="outline" className="w-full mt-4">
-              크롤링 요청
-            </Button>
-          </Card>
+            <button className="btn-secondary mt-4 w-full">지금 크롤링 요청</button>
+          </div>
         </div>
       </div>
     </div>

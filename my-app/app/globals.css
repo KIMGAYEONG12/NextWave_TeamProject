@@ -2,22 +2,50 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  color-scheme: light;
-}
-
-html,
-body {
+html, body {
   height: 100%;
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Malgun Gothic",
-    "Apple SD Gothic Neo", Roboto, sans-serif;
-  color: #111827;
-  background-color: #f9fafb;
+  background-color: #f4f6fb;
+  color: #101828;
 }
 
-* {
-  box-sizing: border-box;
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.card {
+  @apply bg-white rounded-2xl border border-slate-200/70 shadow-card;
+}
+
+.badge {
+  @apply inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium;
+}
+
+.btn-primary {
+  @apply inline-flex items-center justify-center gap-1.5 rounded-xl bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-700 disabled:opacity-50;
+}
+
+.btn-secondary {
+  @apply inline-flex items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50;
+}
+
+.input {
+  @apply w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-800 placeholder:text-slate-400 focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-100;
+}
+
+.table-th {
+  @apply px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-400;
+}
+.table-td {
+  @apply px-4 py-3.5 text-sm text-slate-700;
 }
