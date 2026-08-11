@@ -41,14 +41,14 @@ export default function VipPage() {
                 key={t}
                 onClick={() => setTab(t)}
                 className={`rounded-lg px-3 py-1.5 text-sm font-medium ${
-                  tab === t ? "bg-brand-600 text-white" : "bg-slate-50 text-slate-500 hover:bg-slate-100"
+                  tab === t ? "bg-brand-600 text-white" : "bg-slate-50 text-black hover:bg-slate-100"
                 }`}
               >
                 {t}
               </button>
             ))}
             <div className="relative ml-auto w-56">
-              <Search size={14} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+              <Search size={14} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-black" />
               <input placeholder="이름, 휴대폰, 이메일 검색" className="input py-1.5 pl-8 text-xs" />
             </div>
           </div>
@@ -73,15 +73,15 @@ export default function VipPage() {
                   className={`cursor-pointer border-b border-slate-50 hover:bg-slate-50 ${selected.id === c.id ? "bg-brand-50/50" : ""}`}
                 >
                   <td className="table-td">
-                    <p className="font-medium text-slate-800">{c.name}</p>
-                    <p className="text-xs text-slate-400">{c.phone}</p>
+                    <p className="font-medium text-black">{c.name}</p>
+                    <p className="text-xs text-black">{c.phone}</p>
                   </td>
                   <td className="table-td">
                     <StatusBadge status={c.grade} />
                   </td>
                   <td className="table-td">{c.points.toLocaleString()}P</td>
                   <td className="table-td">{c.visits}회</td>
-                  <td className="table-td text-slate-500">{c.lastVisit}</td>
+                  <td className="table-td text-black">{c.lastVisit}</td>
                   <td className="table-td font-medium">{c.total.toLocaleString()}원</td>
                   <td className="table-td">
                     <button className="text-xs font-medium text-brand-600">상세 보기</button>
@@ -99,32 +99,32 @@ export default function VipPage() {
             </div>
             <div>
               <div className="flex items-center gap-1.5">
-                <p className="font-bold text-slate-900">{selected.name}</p>
+                <p className="font-bold text-black">{selected.name}</p>
                 <StatusBadge status={selected.grade} />
               </div>
-              <p className="text-xs text-slate-400">{selected.email}</p>
+              <p className="text-xs text-black">{selected.email}</p>
             </div>
           </div>
 
           <div className="mb-5 grid grid-cols-3 gap-2 rounded-xl bg-slate-50 p-3 text-center">
             <div>
-              <p className="text-xs text-slate-400">포인트</p>
-              <p className="text-sm font-bold text-slate-800">{selected.points.toLocaleString()}P</p>
+              <p className="text-xs text-black">포인트</p>
+              <p className="text-sm font-bold text-black">{selected.points.toLocaleString()}P</p>
             </div>
             <div>
-              <p className="text-xs text-slate-400">방문 횟수</p>
-              <p className="text-sm font-bold text-slate-800">{selected.visits}회</p>
+              <p className="text-xs text-black">방문 횟수</p>
+              <p className="text-sm font-bold text-black">{selected.visits}회</p>
             </div>
             <div>
-              <p className="text-xs text-slate-400">총 주문 금액</p>
-              <p className="text-sm font-bold text-slate-800">₩{selected.total.toLocaleString()}</p>
+              <p className="text-xs text-black">총 주문 금액</p>
+              <p className="text-sm font-bold text-black">₩{selected.total.toLocaleString()}</p>
             </div>
           </div>
 
-          <p className="mb-2 text-xs font-semibold uppercase text-slate-400">등급 혜택</p>
+          <p className="mb-2 text-xs font-semibold uppercase text-black">등급 혜택</p>
           <ul className="mb-5 space-y-1.5">
             {gradeBenefits.map((b) => (
-              <li key={b} className="flex items-center gap-2 text-sm text-slate-600">
+              <li key={b} className="flex items-center gap-2 text-sm text-black">
                 <span className="h-1.5 w-1.5 rounded-full bg-brand-500" /> {b}
               </li>
             ))}

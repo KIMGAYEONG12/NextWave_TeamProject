@@ -11,17 +11,17 @@ export default function Sidebar() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const content = (
-    <div className="flex h-full w-72 flex-col bg-navy-950 text-slate-300">
+    <div className="flex h-full w-72 flex-col border-r border-slate-200 bg-white text-black">
       <div className="flex items-center gap-2.5 px-5 py-5">
         <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-500 text-white">
           <Coffee size={18} />
         </div>
         <div>
-          <p className="text-base font-bold leading-tight text-white">cafeON</p>
-          <p className="text-[11px] leading-tight text-slate-400">사장님 관리 시스템</p>
+          <p className="text-base font-bold leading-tight text-black">cafeON</p>
+          <p className="text-[11px] leading-tight text-black/60">사장님 관리 시스템</p>
         </div>
         <button
-          className="ml-auto rounded-lg p-1.5 text-slate-400 hover:bg-navy-800 lg:hidden"
+          className="ml-auto rounded-lg p-1.5 text-black hover:bg-slate-100 lg:hidden"
           onClick={() => setMobileOpen(false)}
         >
           <X size={18} />
@@ -31,7 +31,7 @@ export default function Sidebar() {
       <nav className="flex-1 space-y-6 overflow-y-auto px-3 pb-4">
         {navSections.map((section) => (
           <div key={section.title}>
-            <p className="px-3 pb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+            <p className="px-3 pb-2 text-[11px] font-semibold uppercase tracking-wider text-black/50">
               {section.title}
             </p>
             <div className="space-y-0.5">
@@ -46,10 +46,10 @@ export default function Sidebar() {
                     className={`flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm transition ${
                       active
                         ? "bg-brand-600 text-white shadow-card"
-                        : "text-slate-300 hover:bg-navy-800 hover:text-white"
+                        : "text-black hover:bg-slate-100"
                     }`}
                   >
-                    <Icon size={17} className={active ? "text-white" : "text-slate-400"} />
+                    <Icon size={17} className={active ? "text-white" : "text-black/70"} />
                     <span className="flex-1 font-medium">{item.label}</span>
                     {!!item.badge && (
                       <span
@@ -79,13 +79,13 @@ export default function Sidebar() {
         </Link>
       </div>
 
-      <div className="flex items-center gap-2.5 border-t border-navy-800 px-4 py-4">
-        <div className="flex h-9 w-9 items-center justify-center rounded-full bg-navy-700 text-sm">🏠</div>
+      <div className="flex items-center gap-2.5 border-t border-slate-200 px-4 py-4">
+        <div className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-100 text-sm">🏠</div>
         <div className="flex-1">
-          <p className="text-sm font-semibold text-white">김사장님</p>
-          <p className="text-[11px] text-slate-400">매장 설정 &gt;</p>
+          <p className="text-sm font-semibold text-black">김사장님</p>
+          <p className="text-[11px] text-black/60">매장 설정 &gt;</p>
         </div>
-        <ChevronDown size={16} className="text-slate-500" />
+        <ChevronDown size={16} className="text-black/60" />
       </div>
     </div>
   );
@@ -97,7 +97,7 @@ export default function Sidebar() {
 
       {/* mobile trigger */}
       <button
-        className="fixed left-3 top-3 z-40 rounded-lg bg-navy-950 p-2 text-white shadow-popover lg:hidden"
+        className="fixed left-3 top-3 z-40 rounded-lg border border-slate-200 bg-white p-2 text-black shadow-popover lg:hidden"
         onClick={() => setMobileOpen(true)}
       >
         <Menu size={18} />

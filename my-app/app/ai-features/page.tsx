@@ -39,14 +39,14 @@ export default function AiFeaturesPage() {
         {features.map((f) => (
           <div key={f.id} className="card p-4">
             <div className="mb-2 flex items-center justify-between">
-              <span className="flex items-center gap-1.5 text-sm font-bold text-slate-800">
+              <span className="flex items-center gap-1.5 text-sm font-bold text-black">
                 <Sparkles size={14} className="text-brand-500" /> {f.name}
               </span>
               <span className="badge bg-brand-50 text-[10px] text-brand-600">
                 AI
               </span>
             </div>
-            <p className="mb-4 text-xs text-slate-800">{f.desc}</p>
+            <p className="mb-4 text-xs text-black">{f.desc}</p>
             <button
               onClick={() => toggle(f.id)}
               className={`relative h-6 w-11 rounded-full transition ${f.enabled ? "bg-brand-600" : "bg-slate-200"}`}
@@ -57,7 +57,7 @@ export default function AiFeaturesPage() {
                 }`}
               />
             </button>
-            <span className="ml-2 align-middle text-xs text-slate-500">
+            <span className="ml-2 align-middle text-xs text-black">
               {f.enabled ? "활성화" : "비활성화"}
             </span>
           </div>
@@ -67,7 +67,7 @@ export default function AiFeaturesPage() {
       <div className="mt-6 grid grid-cols-1 gap-5 xl:grid-cols-[1fr_320px]">
         <div className="card p-5">
           <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
-            <h3 className="font-bold text-slate-900">AI 분석 리포트</h3>
+            <h3 className="font-bold text-black">AI 분석 리포트</h3>
             <select className="input w-28 py-1.5 text-xs">
               <option>이번 주</option>
               <option>지난 주</option>
@@ -81,7 +81,7 @@ export default function AiFeaturesPage() {
                 className={`rounded-lg px-3 py-1.5 text-xs font-medium ${
                   reportTab === t
                     ? "bg-brand-600 text-white"
-                    : "bg-slate-50 text-slate-500 hover:bg-slate-100"
+                    : "bg-slate-50 text-black hover:bg-slate-100"
                 }`}
               >
                 {t}
@@ -91,8 +91,8 @@ export default function AiFeaturesPage() {
 
           {reportTab === "매출 예측 리포트" ? (
             <>
-              <p className="text-xs text-slate-400">이번 주 매출 예측</p>
-              <p className="mb-4 text-2xl font-bold text-slate-900">
+              <p className="text-xs text-black">이번 주 매출 예측</p>
+              <p className="mb-4 text-2xl font-bold text-black">
                 ₩{total.toLocaleString()}{" "}
                 <span className="text-sm font-medium text-emerald-600">
                   ▲ 12.5% 지난 대비
@@ -113,27 +113,27 @@ export default function AiFeaturesPage() {
                       className={`w-full rounded-t-lg ${d.highlight ? "bg-brand-600" : "bg-brand-200"}`}
                       style={{ height: `${(d.value / max) * 140}px` }}
                     />
-                    <span className="text-[11px] text-slate-400">{d.day}</span>
+                    <span className="text-[11px] text-black">{d.day}</span>
                   </div>
                 ))}
               </div>
             </>
           ) : (
-            <p className="py-16 text-center text-sm text-slate-400">
+            <p className="py-16 text-center text-sm text-black">
               {reportTab} 데이터를 분석 중입니다.
             </p>
           )}
         </div>
 
         <div className="card p-5">
-          <h3 className="mb-3 flex items-center gap-1.5 font-bold text-slate-900">
+          <h3 className="mb-3 flex items-center gap-1.5 font-bold text-black">
             <Lightbulb size={16} className="text-amber-400" /> AI 추천 인사이트
           </h3>
           <div className="space-y-3">
             {aiInsights.map((t, i) => (
               <div
                 key={i}
-                className="rounded-xl bg-brand-50/60 p-3 text-sm leading-relaxed text-slate-700"
+                className="rounded-xl bg-brand-50/60 p-3 text-sm leading-relaxed text-black"
               >
                 {t}
               </div>

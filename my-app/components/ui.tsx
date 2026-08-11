@@ -13,8 +13,8 @@ export function PageHeader({
   return (
     <div className="mb-6 flex flex-wrap items-start justify-between gap-3">
       <div>
-        <h1 className="text-2xl font-bold text-slate-900">{title}</h1>
-        {desc && <p className="mt-1 text-sm text-slate-500">{desc}</p>}
+        <h1 className="text-2xl font-bold text-black">{title}</h1>
+        {desc && <p className="mt-1 text-sm text-black">{desc}</p>}
       </div>
       {action && <div className="flex items-center gap-2">{action}</div>}
     </div>
@@ -39,13 +39,13 @@ export function StatCard({
     success: "bg-emerald-50 text-emerald-600",
     warning: "bg-amber-50 text-amber-600",
     danger: "bg-red-50 text-red-600",
-    slate: "bg-slate-100 text-slate-600",
+    slate: "bg-slate-100 text-black",
   };
   return (
     <div className="card flex items-center justify-between p-5">
       <div>
-        <p className="text-sm text-slate-500">{label}</p>
-        <p className="mt-1.5 text-2xl font-bold text-slate-900">{value}</p>
+        <p className="text-sm text-black">{label}</p>
+        <p className="mt-1.5 text-2xl font-bold text-black">{value}</p>
         {sub && <p className="mt-1 text-xs font-medium text-emerald-600">{sub}</p>}
       </div>
       <div className={`flex h-11 w-11 items-center justify-center rounded-xl ${toneMap[tone]}`}>
@@ -68,28 +68,28 @@ const statusTone: Record<string, string> = {
   완료: "bg-emerald-50 text-emerald-600",
   취소: "bg-red-50 text-red-600",
   진행중: "bg-emerald-50 text-emerald-600",
-  종료: "bg-slate-100 text-slate-500",
+  종료: "bg-slate-100 text-black",
   게시중: "bg-emerald-50 text-emerald-600",
   예약: "bg-brand-50 text-brand-600",
   "발행 중": "bg-emerald-50 text-emerald-600",
-  "임시 저장": "bg-slate-100 text-slate-500",
+  "임시 저장": "bg-slate-100 text-black",
   "예약 발행": "bg-brand-50 text-brand-600",
   사용중: "bg-red-50 text-red-600",
   예약됨: "bg-amber-50 text-amber-600",
   비어있음: "bg-emerald-50 text-emerald-600",
-  청소중: "bg-slate-100 text-slate-500",
-  "일반 리뷰": "bg-slate-100 text-slate-600",
+  청소중: "bg-slate-100 text-black",
+  "일반 리뷰": "bg-slate-100 text-black",
   "신고 접수": "bg-red-50 text-red-600",
   VIP: "bg-navy-900 text-white",
   GOLD: "bg-amber-100 text-amber-700",
-  SILVER: "bg-slate-200 text-slate-700",
+  SILVER: "bg-slate-200 text-black",
   BRONZE: "bg-orange-100 text-orange-700",
   NEW: "bg-emerald-100 text-emerald-700",
 };
 
 export function StatusBadge({ status }: { status: string }) {
   return (
-    <span className={`badge ${statusTone[status] ?? "bg-slate-100 text-slate-600"}`}>{status}</span>
+    <span className={`badge ${statusTone[status] ?? "bg-slate-100 text-black"}`}>{status}</span>
   );
 }
 

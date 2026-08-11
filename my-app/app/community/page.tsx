@@ -45,16 +45,16 @@ export default function CommunityPage() {
                 <div className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-50 text-xs font-bold text-brand-600">
                   {p.author[0]}
                 </div>
-                <span className="text-sm font-semibold text-slate-800">{p.author}</span>
+                <span className="text-sm font-semibold text-black">{p.author}</span>
                 {p.pinned && (
                   <span className="badge bg-brand-50 text-brand-600">
                     <Pin size={11} /> 고정
                   </span>
                 )}
-                <span className="ml-auto text-xs text-slate-400">{p.date}</span>
+                <span className="ml-auto text-xs text-black">{p.date}</span>
               </div>
-              <p className="text-sm leading-relaxed text-slate-700">{p.content}</p>
-              <div className="mt-3 flex items-center gap-4 text-xs text-slate-400">
+              <p className="text-sm leading-relaxed text-black">{p.content}</p>
+              <div className="mt-3 flex items-center gap-4 text-xs text-black">
                 <button className="flex items-center gap-1 hover:text-red-500">
                   <Heart size={14} /> {p.likes}
                 </button>

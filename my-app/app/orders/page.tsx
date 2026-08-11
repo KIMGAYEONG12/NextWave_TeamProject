@@ -52,14 +52,14 @@ export default function OrdersPage() {
                 key={t}
                 onClick={() => setTab(t)}
                 className={`rounded-lg px-3 py-1.5 text-sm font-medium ${
-                  tab === t ? "bg-brand-600 text-white" : "bg-slate-50 text-slate-500 hover:bg-slate-100"
+                  tab === t ? "bg-brand-600 text-white" : "bg-slate-50 text-black hover:bg-slate-100"
                 }`}
               >
                 {t}
               </button>
             ))}
             <div className="relative ml-auto w-56">
-              <Search size={14} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+              <Search size={14} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-black" />
               <input
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
@@ -91,7 +91,7 @@ export default function OrdersPage() {
                 >
                   <td className="table-td font-semibold text-brand-600">{o.id}</td>
                   <td className="table-td">{o.customer}</td>
-                  <td className="table-td text-slate-500">
+                  <td className="table-td text-black">
                     {o.items.map((i) => i.name).join(", ")}
                     {o.items.length > 1 ? ` 외 ${o.items.length - 1}` : ""}
                   </td>
@@ -99,7 +99,7 @@ export default function OrdersPage() {
                   <td className="table-td">
                     <StatusBadge status={o.status} />
                   </td>
-                  <td className="table-td text-slate-400">{o.time}</td>
+                  <td className="table-td text-black">{o.time}</td>
                 </tr>
               ))}
             </tbody>
@@ -108,26 +108,26 @@ export default function OrdersPage() {
 
         <div className="card h-fit p-5">
           <div className="mb-4 flex items-center justify-between">
-            <h3 className="font-bold text-slate-900">주문 상세 {selected.id}</h3>
+            <h3 className="font-bold text-black">주문 상세 {selected.id}</h3>
             <StatusBadge status={selected.status} />
           </div>
-          <p className="mb-1 text-xs text-slate-400">주문 시각</p>
-          <p className="mb-3 text-sm font-medium text-slate-700">2026.08.07 {selected.time}</p>
-          <p className="mb-1 text-xs text-slate-400">주문 고객</p>
-          <p className="mb-3 text-sm font-medium text-slate-700">
+          <p className="mb-1 text-xs text-black">주문 시각</p>
+          <p className="mb-3 text-sm font-medium text-black">2026.08.07 {selected.time}</p>
+          <p className="mb-1 text-xs text-black">주문 고객</p>
+          <p className="mb-3 text-sm font-medium text-black">
             {selected.customer} · {selected.phone}
           </p>
-          <p className="mb-2 text-xs text-slate-400">주문 내역</p>
+          <p className="mb-2 text-xs text-black">주문 내역</p>
           <div className="mb-3 space-y-2 rounded-xl bg-slate-50 p-3">
             {selected.items.map((i, idx) => (
               <div key={idx} className="flex justify-between text-sm">
-                <span className="text-slate-600">
+                <span className="text-black">
                   {i.name} x{i.qty}
                 </span>
-                <span className="font-medium text-slate-700">{(i.price * i.qty).toLocaleString()}원</span>
+                <span className="font-medium text-black">{(i.price * i.qty).toLocaleString()}원</span>
               </div>
             ))}
-            <div className="flex justify-between border-t border-slate-200 pt-2 text-sm font-bold text-slate-900">
+            <div className="flex justify-between border-t border-slate-200 pt-2 text-sm font-bold text-black">
               <span>합계</span>
               <span>{selected.total.toLocaleString()}원</span>
             </div>

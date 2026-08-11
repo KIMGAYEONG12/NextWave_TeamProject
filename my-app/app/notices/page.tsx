@@ -25,20 +25,20 @@ export default function NoticesPage() {
 
       <div className="mb-5 grid grid-cols-2 gap-4 sm:grid-cols-4">
         <div className="card p-4">
-          <p className="text-xs text-slate-500">전체 소식</p>
-          <p className="mt-1 text-xl font-bold text-slate-900">{notices.length}건</p>
+          <p className="text-xs text-black">전체 소식</p>
+          <p className="mt-1 text-xl font-bold text-black">{notices.length}건</p>
         </div>
         <div className="card p-4">
-          <p className="text-xs text-slate-500">공지</p>
-          <p className="mt-1 text-xl font-bold text-slate-900">{notices.filter((n) => n.type === "공지").length}건</p>
+          <p className="text-xs text-black">공지</p>
+          <p className="mt-1 text-xl font-bold text-black">{notices.filter((n) => n.type === "공지").length}건</p>
         </div>
         <div className="card p-4">
-          <p className="text-xs text-slate-500">이벤트</p>
-          <p className="mt-1 text-xl font-bold text-slate-900">{notices.filter((n) => n.type === "이벤트").length}건</p>
+          <p className="text-xs text-black">이벤트</p>
+          <p className="mt-1 text-xl font-bold text-black">{notices.filter((n) => n.type === "이벤트").length}건</p>
         </div>
         <div className="card p-4">
-          <p className="text-xs text-slate-500">배너/홍보</p>
-          <p className="mt-1 text-xl font-bold text-slate-900">4건</p>
+          <p className="text-xs text-black">배너/홍보</p>
+          <p className="mt-1 text-xl font-bold text-black">4건</p>
         </div>
       </div>
 
@@ -49,14 +49,14 @@ export default function NoticesPage() {
               key={t}
               onClick={() => setTab(t)}
               className={`rounded-lg px-3 py-1.5 text-sm font-medium ${
-                tab === t ? "bg-brand-600 text-white" : "bg-slate-50 text-slate-500 hover:bg-slate-100"
+                tab === t ? "bg-brand-600 text-white" : "bg-slate-50 text-black hover:bg-slate-100"
               }`}
             >
               {t}
             </button>
           ))}
           <div className="relative ml-auto w-56">
-            <Search size={14} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+            <Search size={14} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-black" />
             <input placeholder="제목 검색" className="input py-1.5 pl-8 text-xs" />
           </div>
         </div>
@@ -75,17 +75,17 @@ export default function NoticesPage() {
           <tbody>
             {filtered.map((n) => (
               <tr key={n.id} className="border-b border-slate-50 hover:bg-slate-50">
-                <td className="table-td font-medium text-slate-800">{n.title}</td>
-                <td className="table-td text-slate-500">{n.type}</td>
-                <td className="table-td text-slate-500">{n.period}</td>
+                <td className="table-td font-medium text-black">{n.title}</td>
+                <td className="table-td text-black">{n.type}</td>
+                <td className="table-td text-black">{n.period}</td>
                 <td className="table-td">
                   <StatusBadge status={n.status} />
                 </td>
-                <td className="table-td text-slate-500">{n.views.toLocaleString()}</td>
+                <td className="table-td text-black">{n.views.toLocaleString()}</td>
                 <td className="table-td">
                   <div className="flex gap-2">
                     <button className="text-xs font-medium text-brand-600">수정</button>
-                    <button className="text-slate-400 hover:text-slate-600">
+                    <button className="text-black hover:text-black">
                       <MoreVertical size={15} />
                     </button>
                   </div>

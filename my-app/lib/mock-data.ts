@@ -7,7 +7,7 @@ export const pricingPlans = [
   },
   {
     name: "프로페셔널",
-    price: "₩49,000",
+    price: "₩39,000",
     current: true,
     features: [
       "고급 매출 분석",

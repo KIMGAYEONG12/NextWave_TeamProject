@@ -3,11 +3,13 @@
 import { useRef, useState } from "react";
 import { UploadCloud, Download, BookOpen, ImageIcon } from "lucide-react";
 import { PageHeader } from "@/components/ui";
+import { useToast } from "@/components/Toast";
 import { aiPhotoUsage, recentRetouches } from "@/lib/data";
 
 const tabs = ["보정하기", "보정 내역"] as const;
 
 export default function AiPhotoPage() {
+  const showToast = useToast();
   const [tab, setTab] = useState<(typeof tabs)[number]>("보정하기");
   const [original, setOriginal] = useState<string | null>(null);
   const [result, setResult] = useState<string | null>(null);
@@ -39,6 +41,7 @@ export default function AiPhotoPage() {
       setTimeout(() => {
         setResult(canvas.toDataURL("image/jpeg", 0.92));
         setProcessing(false);
+        showToast("AI 보정이 완료되었습니다!");
       }, 900);
     };
     img.src = original;
@@ -69,7 +72,7 @@ export default function AiPhotoPage() {
             key={t}
             onClick={() => setTab(t)}
             className={`rounded-lg px-3 py-1.5 text-sm font-medium ${
-              tab === t ? "bg-brand-600 text-white" : "bg-slate-50 text-slate-500 hover:bg-slate-100"
+              tab === t ? "bg-brand-600 text-white" : "bg-slate-50 text-black hover:bg-slate-100"
             }`}
           >
             {t}
@@ -93,9 +96,9 @@ export default function AiPhotoPage() {
               <img src={original} alt="업로드한 이미지" className="h-full max-h-52 rounded-lg object-contain" />
             ) : (
               <>
-                <UploadCloud size={30} className="text-slate-300" />
-                <p className="text-sm text-slate-500">사진을 드래그하거나 클릭하여 업로드</p>
-                <p className="text-xs text-slate-400">JPG, PNG 파일 (최대 10MB)</p>
+                <UploadCloud size={30} className="text-black" />
+                <p className="text-sm text-black">사진을 드래그하거나 클릭하여 업로드</p>
+                <p className="text-xs text-black">JPG, PNG 파일 (최대 10MB)</p>
               </>
             )}
             <input
@@ -108,27 +111,27 @@ export default function AiPhotoPage() {
           </div>
 
           <div className="card p-5">
-            <p className="mb-3 text-sm font-semibold text-slate-700">보정 미리보기</p>
+            <p className="mb-3 text-sm font-semibold text-black">보정 미리보기</p>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <p className="mb-1.5 text-xs text-slate-400">원본 사진</p>
+                <p className="mb-1.5 text-xs text-black">원본 사진</p>
                 <div className="flex h-32 items-center justify-center rounded-xl bg-slate-50">
                   {original ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={original} alt="원본" className="h-full w-full rounded-xl object-cover" />
                   ) : (
-                    <ImageIcon className="text-slate-300" />
+                    <ImageIcon className="text-black" />
                   )}
                 </div>
               </div>
               <div>
-                <p className="mb-1.5 text-xs text-slate-400">AI 보정 결과</p>
+                <p className="mb-1.5 text-xs text-black">AI 보정 결과</p>
                 <div className="flex h-32 items-center justify-center rounded-xl bg-slate-50">
                   {result ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={result} alt="보정 결과" className="h-full w-full rounded-xl object-cover" />
                   ) : (
-                    <ImageIcon className="text-slate-300" />
+                    <ImageIcon className="text-black" />
                   )}
                 </div>
               </div>
@@ -148,13 +151,13 @@ export default function AiPhotoPage() {
 
       {tab === "보정 내역" && (
         <div className="card p-5">
-          <p className="mb-4 text-sm font-semibold text-slate-700">최근 보정 내역</p>
+          <p className="mb-4 text-sm font-semibold text-black">최근 보정 내역</p>
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-5">
             {recentRetouches.map((r, i) => (
               <div key={i} className="rounded-xl border border-slate-100 p-3 text-center">
                 <div className="mb-2 flex h-16 items-center justify-center rounded-lg bg-slate-50 text-2xl">☕</div>
-                <p className="text-xs font-medium text-slate-700">{r.name}</p>
-                <p className="text-[11px] text-slate-400">{r.time}</p>
+                <p className="text-xs font-medium text-black">{r.name}</p>
+                <p className="text-[11px] text-black">{r.time}</p>
               </div>
             ))}
           </div>

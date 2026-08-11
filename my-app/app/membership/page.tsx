@@ -23,18 +23,18 @@ export default function MembershipPage() {
 
       <div className="mt-6 grid grid-cols-1 gap-5 xl:grid-cols-[360px_1fr]">
         <div className="card p-5">
-          <h3 className="mb-4 font-bold text-slate-900">포인트 적립 정책</h3>
-          <label className="mb-1 block text-xs text-slate-500">적립률</label>
+          <h3 className="mb-4 font-bold text-black">포인트 적립 정책</h3>
+          <label className="mb-1 block text-xs text-black">적립률</label>
           <div className="mb-4 flex items-center gap-2">
             <input
               type="number"
               value={rate}
               onChange={(e) => setRate(Number(e.target.value))}
-              className="input w-24"
+              className="input w-20"
             />
-            <span className="text-sm text-slate-500">% 결제 금액 대비</span>
+            <span className="whitespace-nowrap text-sm text-black">% 결제 금액 대비</span>
           </div>
-          <label className="mb-1 block text-xs text-slate-500">최소 사용 가능 포인트</label>
+          <label className="mb-1 block text-xs text-black">최소 사용 가능 포인트</label>
           <div className="mb-4 flex items-center gap-2">
             <input
               type="number"
@@ -42,9 +42,9 @@ export default function MembershipPage() {
               onChange={(e) => setMinPoint(Number(e.target.value))}
               className="input w-32"
             />
-            <span className="text-sm text-slate-500">P</span>
+            <span className="text-sm text-black">P</span>
           </div>
-          <label className="mb-5 flex items-center gap-2 text-sm text-slate-600">
+          <label className="mb-5 flex items-center gap-2 text-sm text-black">
             <input type="checkbox" checked={restrict} onChange={(e) => setRestrict(e.target.checked)} className="h-4 w-4 rounded border-slate-300" />
             쿠폰 + 포인트 중복 사용 제한 (동시 사용 끄기)
           </label>
@@ -53,7 +53,7 @@ export default function MembershipPage() {
 
         <div className="card p-5">
           <div className="mb-4 flex items-center justify-between">
-            <h3 className="font-bold text-slate-900">쿠폰 관리</h3>
+            <h3 className="font-bold text-black">쿠폰 관리</h3>
             <button className="btn-primary">
               <Plus size={15} /> 쿠폰 발급
             </button>
@@ -72,14 +72,14 @@ export default function MembershipPage() {
             <tbody>
               {coupons.map((c) => (
                 <tr key={c.id} className="border-b border-slate-50 hover:bg-slate-50">
-                  <td className="table-td font-medium text-slate-800">{c.name}</td>
+                  <td className="table-td font-medium text-black">{c.name}</td>
                   <td className="table-td text-brand-600">{c.discount}</td>
-                  <td className="table-td text-slate-500">{c.target}</td>
-                  <td className="table-td text-slate-500">{c.period}</td>
+                  <td className="table-td text-black">{c.target}</td>
+                  <td className="table-td text-black">{c.period}</td>
                   <td className="table-td">
                     <StatusBadge status={c.status} />
                   </td>
-                  <td className="table-td text-slate-500">{c.used}</td>
+                  <td className="table-td text-black">{c.used}</td>
                 </tr>
               ))}
             </tbody>

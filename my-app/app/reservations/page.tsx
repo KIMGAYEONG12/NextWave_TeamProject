@@ -64,7 +64,7 @@ export default function ReservationsPage() {
         {/* calendar */}
         <div className="card p-5">
           <div className="mb-4 flex items-center justify-between">
-            <h3 className="text-lg font-bold text-slate-900">
+            <h3 className="text-lg font-bold text-black">
               {year}년 {month + 1}월
             </h3>
             <div className="flex items-center gap-1">
@@ -85,7 +85,7 @@ export default function ReservationsPage() {
 
           <div className="grid grid-cols-7 gap-2">
             {WEEKDAYS.map((w) => (
-              <div key={w} className="pb-1 text-center text-xs font-semibold text-slate-400">
+              <div key={w} className="pb-1 text-center text-xs font-semibold text-black">
                 {w}
               </div>
             ))}
@@ -99,13 +99,13 @@ export default function ReservationsPage() {
                   onClick={() => c.current && setSelectedDate(c.dateKey)}
                   className={`flex h-24 flex-col items-start gap-1.5 rounded-xl border p-2 text-left transition ${
                     !c.current
-                      ? "border-transparent text-slate-300"
+                      ? "border-transparent text-black"
                       : isSelected
                       ? "border-brand-400 bg-brand-50 ring-2 ring-brand-100"
                       : "border-slate-100 hover:bg-slate-50"
                   }`}
                 >
-                  <span className={`text-sm font-semibold ${isSelected ? "text-brand-700" : "text-slate-600"}`}>
+                  <span className={`text-sm font-semibold ${isSelected ? "text-brand-700" : "text-black"}`}>
                     {c.day}
                   </span>
                   {count > 0 && (
@@ -122,12 +122,12 @@ export default function ReservationsPage() {
         {/* side: day list + detail */}
         <div className="space-y-5">
           <div className="card p-4">
-            <h3 className="mb-3 px-1 text-sm font-bold text-slate-900">
+            <h3 className="mb-3 px-1 text-sm font-bold text-black">
               {month + 1}월 {Number(selectedDate.split("-")[2])}일 예약 목록
             </h3>
             <div className="space-y-2">
               {dayReservations.length === 0 && (
-                <p className="px-1 py-6 text-center text-sm text-slate-400">예약이 없습니다.</p>
+                <p className="px-1 py-6 text-center text-sm text-black">예약이 없습니다.</p>
               )}
               {dayReservations.map((r) => (
                 <button
@@ -138,10 +138,10 @@ export default function ReservationsPage() {
                   }`}
                 >
                   <div>
-                    <p className="text-sm font-semibold text-slate-800">
+                    <p className="text-sm font-semibold text-black">
                       {r.time} · {r.name}
                     </p>
-                    <p className="text-xs text-slate-400">{r.people}명</p>
+                    <p className="text-xs text-black">{r.people}명</p>
                   </div>
                   <StatusBadge status={r.status} />
                 </button>
@@ -151,7 +151,7 @@ export default function ReservationsPage() {
 
           {dayReservations.length > 0 && (
             <div className="card p-5">
-              <h3 className="mb-3 text-sm font-bold text-slate-900">예약 상세</h3>
+              <h3 className="mb-3 text-sm font-bold text-black">예약 상세</h3>
               <dl className="space-y-2.5 text-sm">
                 <Row label="예약 번호" value={selected.id} />
                 <Row label="예약 고객" value={`${selected.name} (${selected.phone})`} />
@@ -160,7 +160,7 @@ export default function ReservationsPage() {
                 <Row label="좌석" value={selected.seat} />
                 <Row label="요청 사항" value={selected.request} />
                 <div className="flex items-center justify-between pt-1">
-                  <dt className="text-slate-500">현재 상태</dt>
+                  <dt className="text-black">현재 상태</dt>
                   <dd>
                     <StatusBadge status={selected.status} />
                   </dd>
@@ -188,34 +188,24 @@ export default function ReservationsPage() {
           <div className="absolute inset-0 bg-slate-900/60" onClick={() => setShowProModal(false)} />
           <div className="relative z-10 max-h-[85vh] w-full max-w-lg overflow-y-auto rounded-2xl bg-white p-6 shadow-popover">
             <div className="mb-4 flex items-center justify-between">
-              <h3 className="text-lg font-bold text-slate-900">프로 기능 더 보기</h3>
-              <button onClick={() => setShowProModal(false)} className="rounded-lg p-1 text-slate-400 hover:bg-slate-100">
+              <h3 className="text-lg font-bold text-black">프로 기능 더 보기</h3>
+              <button onClick={() => setShowProModal(false)} className="rounded-lg p-1 text-black hover:bg-slate-100">
                 <X size={18} />
               </button>
             </div>
-            <p className="mb-5 text-sm leading-relaxed text-slate-500">
-              현재 <span className="font-semibold text-slate-700">프로페셔널</span> 요금제에서 이용 중인 기능과, 상위
-              요금제에서 추가로 이용할 수 있는 기능입니다.
+            <p className="mb-5 text-sm leading-relaxed text-black">
+              현재 <span className="font-semibold text-black">멤버십</span> 요금제에서 이용 중인 기능입니다.
             </p>
 
-            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-400">프로페셔널 포함 기능</p>
-            <ul className="mb-5 space-y-2">
+            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-black">멤버십 포함 기능</p>
+            <ul className="mb-6 space-y-2">
               {["모든 기본 기능", "고급 매출 분석", "예약 관리", "멤버십(포인트, 쿠폰)", "마케팅 기능(쿠폰, 알림)", "블로그(CMS)", "SEO 관리", "우선 고객 지원"].map(
                 (f) => (
-                  <li key={f} className="flex items-center gap-2 text-sm text-slate-700">
+                  <li key={f} className="flex items-center gap-2 text-sm text-black">
                     <Check size={15} className="text-brand-600" /> {f}
                   </li>
                 )
               )}
-            </ul>
-
-            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-400">엔터프라이즈로 업그레이드 시</p>
-            <ul className="mb-6 space-y-2">
-              {["무제한 데이터", "전담 지원", "맞춤 기능"].map((f) => (
-                <li key={f} className="flex items-center gap-2 text-sm text-slate-400">
-                  <Check size={15} className="text-slate-300" /> {f}
-                </li>
-              ))}
             </ul>
 
             <div className="flex justify-end gap-2">
@@ -236,8 +226,8 @@ export default function ReservationsPage() {
 function Row({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex justify-between gap-4">
-      <dt className="shrink-0 text-slate-500">{label}</dt>
-      <dd className="text-right font-medium text-slate-800">{value}</dd>
+      <dt className="shrink-0 text-black">{label}</dt>
+      <dd className="text-right font-medium text-black">{value}</dd>
     </div>
   );
 }

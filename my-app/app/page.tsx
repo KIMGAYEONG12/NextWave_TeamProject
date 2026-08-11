@@ -22,7 +22,7 @@ export default function DashboardPage() {
       <div className="mt-6 grid grid-cols-1 gap-4 xl:grid-cols-3">
         <div className="card p-5 xl:col-span-2">
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="font-bold text-slate-900">최근 7일 매출 추이</h2>
+            <h2 className="font-bold text-black">최근 7일 매출 추이</h2>
             <select className="input w-24 py-1.5 text-xs">
               <option>7일</option>
               <option>30일</option>
@@ -31,44 +31,44 @@ export default function DashboardPage() {
           <div className="flex h-56 items-end gap-3">
             {salesTrend.map((d) => (
               <div key={d.day} className="flex flex-1 flex-col items-center gap-2">
-                <span className="text-xs font-semibold text-slate-500">
+                <span className="text-xs font-semibold text-black">
                   {d.value === max ? `${d.value.toLocaleString()}` : ""}
                 </span>
                 <div
                   className={`w-full rounded-t-lg ${d.value === max ? "bg-brand-600" : "bg-brand-200"}`}
                   style={{ height: `${(d.value / max) * 160}px` }}
                 />
-                <span className="text-[11px] text-slate-400">{d.day}</span>
+                <span className="text-[11px] text-black">{d.day}</span>
               </div>
             ))}
           </div>
         </div>
 
         <div className="card p-5">
-          <h2 className="mb-4 font-bold text-slate-900">지금 매장 상태</h2>
+          <h2 className="mb-4 font-bold text-black">지금 매장 상태</h2>
           <div className="mb-4 flex items-center gap-2">
             <span className="h-2.5 w-2.5 rounded-full bg-emerald-500" />
             <span className="text-sm font-semibold text-emerald-600">여유</span>
           </div>
           <dl className="space-y-3 text-sm">
             <div className="flex justify-between">
-              <dt className="text-slate-500">영업 시간</dt>
-              <dd className="font-medium text-slate-800">08:00 ~ 21:00</dd>
+              <dt className="text-black">영업 시간</dt>
+              <dd className="font-medium text-black">08:00 ~ 21:00</dd>
             </div>
             <div className="flex justify-between">
-              <dt className="text-slate-500">노쇼 정책</dt>
-              <dd className="font-medium text-slate-800">예약 60분 전까지 무료취소</dd>
+              <dt className="text-black">노쇼 정책</dt>
+              <dd className="font-medium text-black">예약 60분 전까지 무료취소</dd>
             </div>
             <div>
               <div className="mb-1.5 flex justify-between">
-                <dt className="text-slate-500">좌석 현황</dt>
-                <dd className="font-medium text-slate-800">여유 (총 32석 / 사용 14석)</dd>
+                <dt className="text-black">좌석 현황</dt>
+                <dd className="font-medium text-black">여유 (총 32석 / 사용 14석)</dd>
               </div>
               <Progress value={14} max={32} />
             </div>
             <div className="flex items-center justify-between">
-              <dt className="text-slate-500">오늘 날씨</dt>
-              <dd className="flex items-center gap-1 font-medium text-slate-800">
+              <dt className="text-black">오늘 날씨</dt>
+              <dd className="flex items-center gap-1 font-medium text-black">
                 <CloudSun size={15} className="text-amber-400" /> 맑음 28°C
               </dd>
             </div>
@@ -79,7 +79,7 @@ export default function DashboardPage() {
       <div className="mt-6 grid grid-cols-1 gap-4 xl:grid-cols-3">
         <div className="card p-5">
           <div className="mb-3 flex items-center justify-between">
-            <h2 className="font-bold text-slate-900">인기 메뉴 순위 (최근 7일)</h2>
+            <h2 className="font-bold text-black">인기 메뉴 순위 (최근 7일)</h2>
             <Link href="/menu" className="flex items-center gap-1 text-xs font-medium text-brand-600">
               전체 보기 <ArrowRight size={12} />
             </Link>
@@ -89,13 +89,13 @@ export default function DashboardPage() {
               <div key={m.rank} className="flex items-center gap-3">
                 <span
                   className={`flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold ${
-                    m.rank === 1 ? "bg-amber-400 text-white" : "bg-slate-100 text-slate-500"
+                    m.rank === 1 ? "bg-amber-400 text-white" : "bg-slate-100 text-black"
                   }`}
                 >
                   {m.rank}
                 </span>
-                <span className="flex-1 text-sm font-medium text-slate-700">{m.name}</span>
-                <span className="text-sm text-slate-400">
+                <span className="flex-1 text-sm font-medium text-black">{m.name}</span>
+                <span className="text-sm text-black">
                   판매 {m.qty}
                   {m.unit}
                 </span>
@@ -106,7 +106,7 @@ export default function DashboardPage() {
 
         <div className="card p-5">
           <div className="mb-3 flex items-center justify-between">
-            <h2 className="font-bold text-slate-900">오늘 예약 현황</h2>
+            <h2 className="font-bold text-black">오늘 예약 현황</h2>
             <Link href="/reservations" className="flex items-center gap-1 text-xs font-medium text-brand-600">
               전체 보기 <ArrowRight size={12} />
             </Link>
@@ -114,9 +114,9 @@ export default function DashboardPage() {
           <div className="space-y-3">
             {todayReservations.map((r, i) => (
               <div key={i} className="flex items-center gap-3 text-sm">
-                <span className="w-12 font-semibold text-slate-700">{r.time}</span>
-                <span className="flex-1 text-slate-600">{r.name}</span>
-                <span className="text-xs text-slate-400">{r.people}명</span>
+                <span className="w-12 font-semibold text-black">{r.time}</span>
+                <span className="flex-1 text-black">{r.name}</span>
+                <span className="text-xs text-black">{r.people}명</span>
                 <StatusBadge status={r.status} />
               </div>
             ))}
@@ -125,7 +125,7 @@ export default function DashboardPage() {
 
         <div className="card p-5">
           <div className="mb-3 flex items-center justify-between">
-            <h2 className="font-bold text-slate-900">최근 리뷰</h2>
+            <h2 className="font-bold text-black">최근 리뷰</h2>
             <Link href="/customers" className="flex items-center gap-1 text-xs font-medium text-brand-600">
               전체 보기 <ArrowRight size={12} />
             </Link>
@@ -138,13 +138,13 @@ export default function DashboardPage() {
                 </div>
                 <div>
                   <div className="flex items-center gap-1.5">
-                    <span className="text-sm font-semibold text-slate-800">{r.name}</span>
+                    <span className="text-sm font-semibold text-black">{r.name}</span>
                     <span className="flex items-center gap-0.5 text-xs font-semibold text-amber-500">
                       <Star size={12} className="fill-amber-400 text-amber-400" /> {r.rating}
                     </span>
-                    <span className="ml-auto text-[11px] text-slate-400">{r.time}</span>
+                    <span className="ml-auto text-[11px] text-black">{r.time}</span>
                   </div>
-                  <p className="mt-0.5 text-xs text-slate-500">{r.text}</p>
+                  <p className="mt-0.5 text-xs text-black">{r.text}</p>
                 </div>
               </div>
             ))}
@@ -154,7 +154,7 @@ export default function DashboardPage() {
 
       <div className="mt-6 card p-5">
         <div className="mb-3 flex items-center justify-between">
-          <h2 className="font-bold text-slate-900">주요 알림</h2>
+          <h2 className="font-bold text-black">주요 알림</h2>
           <Link href="/notifications" className="flex items-center gap-1 text-xs font-medium text-brand-600">
             전체 보기 <ArrowRight size={12} />
           </Link>
@@ -170,8 +170,8 @@ export default function DashboardPage() {
               <p className={`text-sm font-semibold ${a.level === "danger" ? "text-red-700" : "text-amber-700"}`}>
                 {a.title}
               </p>
-              <p className="mt-0.5 text-xs text-slate-500">{a.desc}</p>
-              <p className="mt-1.5 text-[11px] text-slate-400">{a.time}</p>
+              <p className="mt-0.5 text-xs text-black">{a.desc}</p>
+              <p className="mt-1.5 text-[11px] text-black">{a.time}</p>
             </div>
           ))}
         </div>

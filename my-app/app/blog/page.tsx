@@ -30,24 +30,24 @@ export default function BlogPage() {
 
       <div className="mb-5 grid grid-cols-2 gap-4 sm:grid-cols-5">
         <div className="card p-4">
-          <p className="text-xs text-slate-500">전체 글</p>
-          <p className="mt-1 text-xl font-bold text-slate-900">{blogStats.total}개</p>
+          <p className="text-xs text-black">전체 글</p>
+          <p className="mt-1 text-xl font-bold text-black">{blogStats.total}개</p>
         </div>
         <div className="card p-4">
-          <p className="text-xs text-slate-500">발행 중</p>
+          <p className="text-xs text-black">발행 중</p>
           <p className="mt-1 text-xl font-bold text-emerald-600">{blogStats.published}개</p>
         </div>
         <div className="card p-4">
-          <p className="text-xs text-slate-500">임시 저장</p>
-          <p className="mt-1 text-xl font-bold text-slate-500">{blogStats.draft}개</p>
+          <p className="text-xs text-black">임시 저장</p>
+          <p className="mt-1 text-xl font-bold text-black">{blogStats.draft}개</p>
         </div>
         <div className="card p-4">
-          <p className="text-xs text-slate-500">예약 발행</p>
+          <p className="text-xs text-black">예약 발행</p>
           <p className="mt-1 text-xl font-bold text-brand-600">{blogStats.scheduled}개</p>
         </div>
         <div className="card p-4">
-          <p className="text-xs text-slate-500">조회수 (이번 달)</p>
-          <p className="mt-1 text-xl font-bold text-slate-900">
+          <p className="text-xs text-black">조회수 (이번 달)</p>
+          <p className="mt-1 text-xl font-bold text-black">
             {blogStats.monthViews.toLocaleString()} <span className="text-xs text-emerald-600">▲{blogStats.viewsGrowth}%</span>
           </p>
         </div>
@@ -60,14 +60,14 @@ export default function BlogPage() {
               key={t}
               onClick={() => setTab(t)}
               className={`rounded-lg px-3 py-1.5 text-sm font-medium ${
-                tab === t ? "bg-brand-600 text-white" : "bg-slate-50 text-slate-500 hover:bg-slate-100"
+                tab === t ? "bg-brand-600 text-white" : "bg-slate-50 text-black hover:bg-slate-100"
               }`}
             >
               {t}
             </button>
           ))}
           <div className="relative ml-auto w-56">
-            <Search size={14} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+            <Search size={14} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-black" />
             <input placeholder="제목 검색" className="input py-1.5 pl-8 text-xs" />
           </div>
           <select className="input w-32 py-1.5 text-xs">
@@ -89,13 +89,13 @@ export default function BlogPage() {
           <tbody>
             {filtered.map((p) => (
               <tr key={p.id} className="border-b border-slate-50 hover:bg-slate-50">
-                <td className="table-td font-medium text-slate-800">{p.title}</td>
-                <td className="table-td text-slate-500">{p.category}</td>
+                <td className="table-td font-medium text-black">{p.title}</td>
+                <td className="table-td text-black">{p.category}</td>
                 <td className="table-td">
                   <StatusBadge status={p.status} />
                 </td>
-                <td className="table-td text-slate-500">{p.date}</td>
-                <td className="table-td text-slate-500">{p.views || "-"}</td>
+                <td className="table-td text-black">{p.date}</td>
+                <td className="table-td text-black">{p.views || "-"}</td>
                 <td className="table-td">
                   <button className="text-xs font-medium text-brand-600">수정</button>
                 </td>
@@ -103,7 +103,7 @@ export default function BlogPage() {
             ))}
           </tbody>
         </table>
-        <div className="mt-4 flex justify-center gap-1 text-sm text-slate-400">
+        <div className="mt-4 flex justify-center gap-1 text-sm text-black">
           {[1, 2, 3, 4, 5].map((n) => (
             <button key={n} className={`h-7 w-7 rounded-lg ${n === 1 ? "bg-brand-600 text-white" : "hover:bg-slate-50"}`}>
               {n}

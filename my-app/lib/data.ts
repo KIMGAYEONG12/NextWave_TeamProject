@@ -273,11 +273,11 @@ export const aiInsights = [
 
 // 요금제 관리 ---------------------------------------------------------------
 export const currentPlan = {
-  name: "프로페셔널",
-  price: 49000,
+  name: "멤버십",
+  price: 39000,
   cycle: "매월 결제",
   nextBillingDate: "2026.09.07 (월)",
-  nextBillingAmount: 49000,
+  nextBillingAmount: 39000,
   paymentMethod: "카드 •••• 1234",
   billingEmail: "owner@ooocoffee.com",
   features: ["모든 기본 기능", "고급 매출 분석", "예약 관리", "멤버십(포인트, 쿠폰)", "마케팅 기능(쿠폰, 알림)", "블로그(CMS)", "SEO 관리", "우선 고객 지원"],
@@ -288,12 +288,3 @@ export const usage = [
   { label: "멤버십 회원", used: 1248, total: 2000, unit: "건" },
   { label: "저장 용량", used: 2.4, total: 10, unit: "GB" },
 ];
-export const plans = [
-  { id: "basic", name: "베이직", price: 19000, features: ["기본 매출 관리", "메뉴/재고 관리", "주문(POS) 관리"], current: false },
-  { id: "pro", name: "프로페셔널", price: 49000, features: ["모든 기본 기능", "고급 매출 분석", "예약 관리", "멤버십(포인트, 쿠폰)", "마케팅 기능 포함"], current: true },
-  { id: "enterprise", name: "엔터프라이즈", price: 99000, features: ["무제한 데이터", "전담 지원", "맞춤 기능"], current: false },
-];
-export const proFeatures = {
-  included: ["모든 기본 기능", "고급 매출 분석", "예약 관리", "멤버십(포인트, 쿠폰)", "마케팅 기능(쿠폰, 알림)", "블로그(CMS)", "SEO 관리", "우선 고객 지원"],
-  upgrade: ["무제한 데이터", "전담 지원", "맞춤 기능"],
-};

@@ -8,7 +8,7 @@ html, body {
 
 body {
   background-color: #f4f6fb;
-  color: #101828;
+  color: #000000;
 }
 
 ::-webkit-scrollbar {
@@ -23,29 +23,31 @@ body {
   background: transparent;
 }
 
-.card {
-  @apply bg-white rounded-2xl border border-slate-200/70 shadow-card;
-}
+@layer components {
+  .card {
+    @apply bg-white rounded-2xl border border-slate-200/70 shadow-card;
+  }
 
-.badge {
-  @apply inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium;
-}
+  .badge {
+    @apply inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2.5 py-1 text-xs font-medium;
+  }
 
-.btn-primary {
-  @apply inline-flex items-center justify-center gap-1.5 rounded-xl bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-700 disabled:opacity-50;
-}
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-1.5 rounded-xl bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-700 disabled:opacity-50;
+  }
 
-.btn-secondary {
-  @apply inline-flex items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50;
-}
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-black transition hover:bg-slate-50;
+  }
 
-.input {
-  @apply w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-800 placeholder:text-slate-400 focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-100;
-}
+  .input {
+    @apply w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-black placeholder:text-slate-400 focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-100;
+  }
 
-.table-th {
-  @apply px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-400;
-}
-.table-td {
-  @apply px-4 py-3.5 text-sm text-slate-700;
+  .table-th {
+    @apply px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-black;
+  }
+  .table-td {
+    @apply px-4 py-3.5 text-sm text-black;
+  }
 }

@@ -17,7 +17,7 @@ export default function PricingPage() {
           <p className="text-xs text-ink-400 mb-1">현재 사용 중인 요금제</p>
           <p className="text-xl font-bold text-ink-900 mb-1">프로페셔널</p>
           <p className="text-2xl font-bold text-brand-600 mb-2">
-            ₩49,000
+            ₩39,000
             <span className="text-sm text-ink-400 font-normal">
               {" "}
               /월 (부가세 별도)
@@ -59,7 +59,7 @@ export default function PricingPage() {
             </div>
             <div className="flex justify-between">
               <dt className="text-ink-500">다음 결제 금액</dt>
-              <dd className="text-ink-800">₩49,000 (부가세 별도)</dd>
+              <dd className="text-ink-800">₩39,000 (부가세 별도)</dd>
             </div>
           </dl>
           <div className="flex items-center justify-between rounded-lg border border-ink-100 px-3 py-2.5 mb-3">

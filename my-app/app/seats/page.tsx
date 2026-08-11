@@ -9,7 +9,7 @@ const toneMap: Record<Seat["status"], string> = {
   사용중: "bg-red-400 border-red-500 text-white",
   예약됨: "bg-amber-300 border-amber-400 text-amber-900",
   비어있음: "bg-emerald-100 border-emerald-300 text-emerald-800",
-  청소중: "bg-slate-200 border-slate-300 text-slate-500",
+  청소중: "bg-slate-200 border-slate-300 text-black",
 };
 
 const legend: { label: Seat["status"]; swatch: string }[] = [
@@ -55,27 +55,27 @@ export default function SeatsPage() {
 
       <div className="mb-5 grid grid-cols-2 gap-4 sm:grid-cols-4">
         <div className="card p-4">
-          <p className="text-xs text-slate-500">전체 좌석</p>
-          <p className="mt-1 text-xl font-bold text-slate-900">{counts.total}석</p>
+          <p className="text-xs text-black">전체 좌석</p>
+          <p className="mt-1 text-xl font-bold text-black">{counts.total}석</p>
         </div>
         <div className="card p-4">
-          <p className="text-xs text-slate-500">사용 중</p>
+          <p className="text-xs text-black">사용 중</p>
           <p className="mt-1 text-xl font-bold text-red-500">
-            {counts.used}석 <span className="text-sm text-slate-400">({Math.round((counts.used / counts.total) * 100)}%)</span>
+            {counts.used}석 <span className="text-sm text-black">({Math.round((counts.used / counts.total) * 100)}%)</span>
           </p>
         </div>
         <div className="card p-4">
-          <p className="text-xs text-slate-500">예약됨</p>
+          <p className="text-xs text-black">예약됨</p>
           <p className="mt-1 text-xl font-bold text-amber-500">
             {counts.reserved}석{" "}
-            <span className="text-sm text-slate-400">({Math.round((counts.reserved / counts.total) * 100)}%)</span>
+            <span className="text-sm text-black">({Math.round((counts.reserved / counts.total) * 100)}%)</span>
           </p>
         </div>
         <div className="card p-4">
-          <p className="text-xs text-slate-500">이용 가능</p>
+          <p className="text-xs text-black">이용 가능</p>
           <p className="mt-1 text-xl font-bold text-emerald-500">
             {counts.empty}석{" "}
-            <span className="text-sm text-slate-400">({Math.round((counts.empty / counts.total) * 100)}%)</span>
+            <span className="text-sm text-black">({Math.round((counts.empty / counts.total) * 100)}%)</span>
           </p>
         </div>
       </div>
@@ -88,10 +88,10 @@ export default function SeatsPage() {
               <option>대구점</option>
               <option>홍대점</option>
             </select>
-            <div className="ml-auto flex items-center gap-4 text-xs text-slate-500">
+            <div className="ml-auto flex flex-wrap items-center gap-3 text-xs text-black">
               {legend.map((l) => (
-                <span key={l.label} className="flex items-center gap-1.5">
-                  <span className={`h-3 w-3 rounded ${l.swatch}`} /> {l.label}
+                <span key={l.label} className="flex shrink-0 items-center gap-1.5 whitespace-nowrap">
+                  <span className={`h-3 w-3 shrink-0 rounded ${l.swatch}`} /> {l.label}
                 </span>
               ))}
             </div>
@@ -115,13 +115,13 @@ export default function SeatsPage() {
               ))}
             </div>
           </div>
-          <p className="mt-3 text-center text-xs text-slate-400">* 좌석을 클릭하면 상세 정보를, 더블클릭하면 상태를 변경합니다.</p>
+          <p className="mt-3 text-center text-xs text-black">* 좌석을 클릭하면 상세 정보를, 더블클릭하면 상태를 변경합니다.</p>
         </div>
 
         <div className="card h-fit p-5">
-          <h3 className="mb-3 text-sm font-bold text-slate-900">좌석 정보</h3>
+          <h3 className="mb-3 text-sm font-bold text-black">좌석 정보</h3>
           <div className="mb-4 flex items-center justify-between">
-            <span className="text-sm text-slate-500">좌석 {selected.label}</span>
+            <span className="text-sm text-black">좌석 {selected.label}</span>
             <span
               className={`badge ${
                 selected.status === "사용중"
@@ -129,7 +129,7 @@ export default function SeatsPage() {
                   : selected.status === "예약됨"
                   ? "bg-amber-50 text-amber-600"
                   : selected.status === "청소중"
-                  ? "bg-slate-100 text-slate-500"
+                  ? "bg-slate-100 text-black"
                   : "bg-emerald-50 text-emerald-600"
               }`}
             >
@@ -139,18 +139,18 @@ export default function SeatsPage() {
           {selected.status === "사용중" ? (
             <dl className="space-y-2.5 text-sm">
               <div className="flex justify-between">
-                <dt className="text-slate-500">이용 고객</dt>
-                <dd className="font-medium text-slate-800">
+                <dt className="text-black">이용 고객</dt>
+                <dd className="font-medium text-black">
                   {selected.guest} ({selected.people}명)
                 </dd>
               </div>
               <div className="flex justify-between">
-                <dt className="text-slate-500">입장 시간</dt>
-                <dd className="font-medium text-slate-800">{selected.since}</dd>
+                <dt className="text-black">입장 시간</dt>
+                <dd className="font-medium text-black">{selected.since}</dd>
               </div>
             </dl>
           ) : (
-            <p className="text-sm text-slate-400">현재 이용 정보가 없습니다.</p>
+            <p className="text-sm text-black">현재 이용 정보가 없습니다.</p>
           )}
           <select className="input mt-5">
             <option>좌석 상태 변경</option>
