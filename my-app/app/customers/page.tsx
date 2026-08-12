@@ -11,7 +11,37 @@ export default function CustomersPage() {
   const [tab, setTab] = useState<(typeof tabs)[number]>("리뷰 관리");
   const [reviews, setReviews] = useState(initialReviews);
 
+  const [customerKeyword, setCustomerKeyword] = useState("");
+  const [customerGrade, setCustomerGrade] = useState("전체 등급");
+
+  const [reviewKeyword, setReviewKeyword] = useState("");
+  const [reviewRating, setReviewRating] = useState("전체 평점");
+  const [reviewStatus, setReviewStatus] = useState("전체 상태");
+
   const reportedReviews = reviews.filter((r) => r.status === "신고 접수");
+
+  const filteredCustomers = customers.filter((c) => {
+    const kw = customerKeyword.trim().toLowerCase();
+    const matchesKeyword =
+      !kw ||
+      c.name.toLowerCase().includes(kw) ||
+      c.phone.toLowerCase().includes(kw) ||
+      c.email.toLowerCase().includes(kw);
+    const matchesGrade = customerGrade === "전체 등급" || c.grade === customerGrade;
+    return matchesKeyword && matchesGrade;
+  });
+
+  const filteredReviews = reviews.filter((r) => {
+    const kw = reviewKeyword.trim().toLowerCase();
+    const matchesKeyword = !kw || r.text.toLowerCase().includes(kw) || r.customer.toLowerCase().includes(kw);
+    const matchesRating =
+      reviewRating === "전체 평점" ||
+      (reviewRating === "5점" && r.rating === 5) ||
+      (reviewRating === "4점" && r.rating === 4) ||
+      (reviewRating === "3점 이하" && r.rating <= 3);
+    const matchesStatus = reviewStatus === "전체 상태" || r.status === reviewStatus;
+    return matchesKeyword && matchesRating && matchesStatus;
+  });
 
   return (
     <div>
@@ -36,9 +66,18 @@ export default function CustomersPage() {
           <div className="mb-4 flex flex-wrap items-center gap-2">
             <div className="relative w-64">
               <Search size={14} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-black" />
-              <input placeholder="이름, 휴대폰, 이메일 검색" className="input py-2 pl-8 text-sm" />
+              <input
+                value={customerKeyword}
+                onChange={(e) => setCustomerKeyword(e.target.value)}
+                placeholder="이름, 휴대폰, 이메일 검색"
+                className="input py-2 pl-8 text-sm"
+              />
             </div>
-            <select className="input w-32 py-2 text-sm">
+            <select
+              value={customerGrade}
+              onChange={(e) => setCustomerGrade(e.target.value)}
+              className="input w-32 py-2 text-sm"
+            >
               <option>전체 등급</option>
               <option>VIP</option>
               <option>GOLD</option>
@@ -59,7 +98,7 @@ export default function CustomersPage() {
               </tr>
             </thead>
             <tbody>
-              {customers.map((c) => (
+              {filteredCustomers.map((c) => (
                 <tr key={c.id} className="border-b border-slate-50 hover:bg-slate-50">
                   <td className="table-td">
                     <p className="font-medium text-black">{c.name}</p>
@@ -76,6 +115,9 @@ export default function CustomersPage() {
               ))}
             </tbody>
           </table>
+          {filteredCustomers.length === 0 && (
+            <p className="py-10 text-center text-sm text-black">검색 조건에 맞는 고객이 없습니다.</p>
+          )}
         </div>
       )}
 
@@ -106,22 +148,35 @@ export default function CustomersPage() {
             <div className="mb-4 flex flex-wrap items-center gap-2">
               <div className="relative w-64">
                 <Search size={14} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-black" />
-                <input placeholder="리뷰 내용, 고객명 검색" className="input py-2 pl-8 text-sm" />
+                <input
+                  value={reviewKeyword}
+                  onChange={(e) => setReviewKeyword(e.target.value)}
+                  placeholder="리뷰 내용, 고객명 검색"
+                  className="input py-2 pl-8 text-sm"
+                />
               </div>
-              <select className="input w-28 py-2 text-sm">
+              <select
+                value={reviewRating}
+                onChange={(e) => setReviewRating(e.target.value)}
+                className="input w-28 py-2 text-sm"
+              >
                 <option>전체 평점</option>
                 <option>5점</option>
                 <option>4점</option>
                 <option>3점 이하</option>
               </select>
-              <select className="input w-28 py-2 text-sm">
+              <select
+                value={reviewStatus}
+                onChange={(e) => setReviewStatus(e.target.value)}
+                className="input w-28 py-2 text-sm"
+              >
                 <option>전체 상태</option>
                 <option>일반 리뷰</option>
                 <option>신고 접수</option>
               </select>
             </div>
             <div className="space-y-3">
-              {reviews.map((r) => (
+              {filteredReviews.map((r) => (
                 <div key={r.id} className="flex items-start gap-3 rounded-xl border border-slate-100 p-4">
                   <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-50 font-semibold text-brand-600">
                     {r.customer[0]}
@@ -144,6 +199,9 @@ export default function CustomersPage() {
                 </div>
               ))}
             </div>
+            {filteredReviews.length === 0 && (
+              <p className="py-10 text-center text-sm text-black">검색 조건에 맞는 리뷰가 없습니다.</p>
+            )}
           </div>
         </>
       )}

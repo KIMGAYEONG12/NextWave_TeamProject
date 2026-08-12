@@ -1,9 +1,13 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { ChevronLeft, ChevronRight, Plus, X, Check, Crown } from "lucide-react";
+import { ChevronLeft, ChevronRight, Plus, X, Check, Crown, ShieldAlert } from "lucide-react";
 import { PageHeader, StatusBadge } from "@/components/ui";
-import { reservations as initialReservations, reservationCounts, Reservation } from "@/lib/data";
+import { Modal } from "@/components/Modal";
+import { useToast } from "@/components/Toast";
+import { reservations as initialReservations, reservationCounts, Reservation, noShowSettings } from "@/lib/data";
+
+const penaltyOptions = ["포인트 차감", "예약 제한", "안내만 발송"] as const;
 
 const WEEKDAYS = ["일", "월", "화", "수", "목", "금", "토"];
 
@@ -28,12 +32,25 @@ function buildMonthGrid(year: number, month: number) {
 }
 
 export default function ReservationsPage() {
+  const showToast = useToast();
   const [year] = useState(2026);
   const [month, setMonth] = useState(7); // August = index 7
   const [selectedDate, setSelectedDate] = useState("2026-08-07");
   const [reservations, setReservations] = useState<Reservation[]>(initialReservations);
   const [selected, setSelected] = useState<Reservation>(initialReservations[0]);
   const [showProModal, setShowProModal] = useState(false);
+
+  const [showNoShowModal, setShowNoShowModal] = useState(false);
+  const [depositEnabled, setDepositEnabled] = useState(noShowSettings.depositEnabled);
+  const [depositAmount, setDepositAmount] = useState(noShowSettings.depositAmount);
+  const [freeCancelHours, setFreeCancelHours] = useState(noShowSettings.freeCancelHours);
+  const [penalty, setPenalty] = useState<(typeof penaltyOptions)[number]>(noShowSettings.penalty);
+  const [penaltyDetail, setPenaltyDetail] = useState(noShowSettings.penaltyDetail);
+
+  const saveNoShowSettings = () => {
+    setShowNoShowModal(false);
+    showToast("노쇼 방지 설정이 저장되었습니다!");
+  };
 
   const cells = useMemo(() => buildMonthGrid(year, month), [year, month]);
   const dayReservations = reservations.filter((r) => r.date === selectedDate);
@@ -50,6 +67,9 @@ export default function ReservationsPage() {
         desc="예약 현황을 확인하고 승인/거절을 관리하세요."
         action={
           <>
+            <button onClick={() => setShowNoShowModal(true)} className="btn-secondary">
+              <ShieldAlert size={15} className="text-red-500" /> 노쇼 방지 설정
+            </button>
             <button onClick={() => setShowProModal(true)} className="btn-secondary">
               <Crown size={15} className="text-amber-500" /> 프로 기능 더 보기
             </button>
@@ -218,6 +238,73 @@ export default function ReservationsPage() {
             </div>
           </div>
         </div>
+      )}
+
+      {showNoShowModal && (
+        <Modal title="노쇼 방지 설정" onClose={() => setShowNoShowModal(false)} width="max-w-lg">
+          <p className="mb-4 text-xs text-black/60">
+            이번 달 노쇼 <span className="font-semibold text-red-600">{noShowSettings.monthNoShow}건</span> 발생
+          </p>
+
+          <label className="mb-2 flex items-center gap-2 text-sm text-black">
+            <input
+              type="checkbox"
+              checked={depositEnabled}
+              onChange={(e) => setDepositEnabled(e.target.checked)}
+              className="h-4 w-4 rounded border-slate-300"
+            />
+            예약금 사용
+          </label>
+          {depositEnabled && (
+            <div className="mb-4 flex items-center gap-2 pl-6">
+              <input
+                type="number"
+                value={depositAmount}
+                onChange={(e) => setDepositAmount(Number(e.target.value))}
+                className="input w-32"
+              />
+              <span className="text-sm text-black">원 / 예약</span>
+            </div>
+          )}
+
+          <label className="mb-1 block text-xs text-black">무료 취소 가능 시간</label>
+          <div className="mb-4 flex items-center gap-2">
+            <input
+              type="number"
+              value={freeCancelHours}
+              onChange={(e) => setFreeCancelHours(Number(e.target.value))}
+              className="input w-24"
+            />
+            <span className="whitespace-nowrap text-sm text-black">시간 전까지 무료 취소 가능</span>
+          </div>
+
+          <label className="mb-1 block text-xs text-black">노쇼 패널티</label>
+          <select
+            className="input mb-3"
+            value={penalty}
+            onChange={(e) => setPenalty(e.target.value as (typeof penaltyOptions)[number])}
+          >
+            {penaltyOptions.map((p) => (
+              <option key={p}>{p}</option>
+            ))}
+          </select>
+          <textarea
+            className="input mb-5"
+            rows={2}
+            value={penaltyDetail}
+            onChange={(e) => setPenaltyDetail(e.target.value)}
+            placeholder="예: 노쇼 1회당 3,000P 차감, 3회 누적 시 온라인 예약 1개월 제한"
+          />
+
+          <div className="flex gap-2">
+            <button className="btn-secondary flex-1" onClick={() => setShowNoShowModal(false)}>
+              취소
+            </button>
+            <button className="btn-primary flex-1" onClick={saveNoShowSettings}>
+              설정 저장
+            </button>
+          </div>
+        </Modal>
       )}
     </div>
   );

@@ -8,6 +8,7 @@ import {
   Gift,
   Users,
   UserCheck,
+  UserCog,
   Newspaper,
   MessagesSquare,
   Search,
@@ -39,6 +40,7 @@ export const navSections: NavSection[] = [
       { label: "예약 관리", href: "/reservations", icon: CalendarDays },
       { label: "실시간 좌석 현황", href: "/seats", icon: Grid3x3 },
       { label: "매장 소식", href: "/notices", icon: Megaphone },
+      { label: "직원 관리", href: "/staff", icon: UserCog },
     ],
   },
   {

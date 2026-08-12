@@ -10,8 +10,15 @@ const tabs = ["전체", "최근 방문", "VIP 고객", "이달 고객", "생일 
 export default function VipPage() {
   const [tab, setTab] = useState<(typeof tabs)[number]>("전체");
   const [selected, setSelected] = useState(customers[0]);
+  const [keyword, setKeyword] = useState("");
 
-  const filtered = tab === "VIP 고객" ? customers.filter((c) => c.grade === "VIP") : customers;
+  const filtered = customers.filter((c) => {
+    const matchesTab = tab === "VIP 고객" ? c.grade === "VIP" : true;
+    const kw = keyword.trim().toLowerCase();
+    const matchesKeyword =
+      !kw || c.name.toLowerCase().includes(kw) || c.phone.toLowerCase().includes(kw) || c.email.toLowerCase().includes(kw);
+    return matchesTab && matchesKeyword;
+  });
 
   return (
     <div>
@@ -49,7 +56,12 @@ export default function VipPage() {
             ))}
             <div className="relative ml-auto w-56">
               <Search size={14} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-black" />
-              <input placeholder="이름, 휴대폰, 이메일 검색" className="input py-1.5 pl-8 text-xs" />
+              <input
+                value={keyword}
+                onChange={(e) => setKeyword(e.target.value)}
+                placeholder="이름, 휴대폰, 이메일 검색"
+                className="input py-1.5 pl-8 text-xs"
+              />
             </div>
           </div>
 
@@ -90,6 +102,9 @@ export default function VipPage() {
               ))}
             </tbody>
           </table>
+          {filtered.length === 0 && (
+            <p className="py-10 text-center text-sm text-black">검색 조건에 맞는 고객이 없습니다.</p>
+          )}
         </div>
 
         <div className="card h-fit p-5">

@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { Plus, Search, Pencil, Trash2, PackageCheck, PackageX, AlertTriangle } from "lucide-react";
+import { Plus, Search, Pencil, Trash2, PackageCheck, PackageX, AlertTriangle, ClipboardList, ArrowDownCircle, ArrowUpCircle } from "lucide-react";
 import { PageHeader, StatusBadge } from "@/components/ui";
 import { Modal } from "@/components/Modal";
 import { useToast } from "@/components/Toast";
-import { menuItems, menuCategories, stockSummary, recentOrdersToStock, MenuItem } from "@/lib/data";
+import { menuItems, menuCategories, stockSummary, recentOrdersToStock, MenuItem, stockLogs as initialStockLogs, StockLog } from "@/lib/data";
+
+const emptyLogForm = { item: "", type: "입고" as StockLog["type"], qty: "", reason: "", staff: "" };
 
 const emojiByCategory: Record<string, string> = {
   커피: "☕",
@@ -27,6 +29,10 @@ export default function MenuPage() {
   const [selectedId, setSelectedId] = useState(menuItems[0].id);
   const [addOpen, setAddOpen] = useState(false);
   const [form, setForm] = useState(emptyForm);
+
+  const [stockLogs, setStockLogs] = useState<StockLog[]>(initialStockLogs);
+  const [logOpen, setLogOpen] = useState(false);
+  const [logForm, setLogForm] = useState(emptyLogForm);
 
   const selected = items.find((m) => m.id === selectedId) ?? items[0];
 
@@ -114,6 +120,28 @@ export default function MenuPage() {
     setForm(emptyForm);
     setAddOpen(false);
     showToast("새 메뉴가 추가되었습니다!");
+  };
+
+  const addStockLog = () => {
+    if (!logForm.item.trim() || !logForm.qty.trim()) {
+      showToast("품목과 수량을 입력해 주세요.");
+      return;
+    }
+    const sign = logForm.type === "입고" ? "+" : "-";
+    const qtyText = logForm.qty.trim().startsWith("+") || logForm.qty.trim().startsWith("-") ? logForm.qty.trim() : `${sign}${logForm.qty.trim()}`;
+    const newLog: StockLog = {
+      id: `sl${Date.now()}`,
+      date: new Date().toISOString().slice(0, 10).replace(/-/g, ".") + " " + new Date().toTimeString().slice(0, 5),
+      item: logForm.item.trim(),
+      type: logForm.type,
+      qty: qtyText,
+      reason: logForm.reason || "-",
+      staff: logForm.staff || "-",
+    };
+    setStockLogs((prev) => [newLog, ...prev]);
+    setLogForm(emptyLogForm);
+    setLogOpen(false);
+    showToast("입출고 내역이 등록되었습니다!");
   };
 
   return (
@@ -310,6 +338,57 @@ export default function MenuPage() {
         </div>
       </div>
 
+      <div className="mt-5 card overflow-x-auto p-5">
+        <div className="mb-4 flex items-center justify-between">
+          <h3 className="flex items-center gap-1.5 font-bold text-black">
+            <ClipboardList size={16} className="text-brand-500" /> 재고 입출고 로그
+          </h3>
+          <button onClick={() => setLogOpen(true)} className="btn-primary">
+            <Plus size={15} /> 입출고 등록
+          </button>
+        </div>
+        <table className="w-full">
+          <thead>
+            <tr className="border-b border-slate-100">
+              <th className="table-th">일시</th>
+              <th className="table-th">품목</th>
+              <th className="table-th">구분</th>
+              <th className="table-th">수량</th>
+              <th className="table-th">사유</th>
+              <th className="table-th">담당자</th>
+            </tr>
+          </thead>
+          <tbody>
+            {stockLogs.map((l) => (
+              <tr key={l.id} className="border-b border-slate-50 hover:bg-slate-50">
+                <td className="table-td text-black/60">{l.date}</td>
+                <td className="table-td font-medium text-black">{l.item}</td>
+                <td className="table-td">
+                  <span
+                    className={`badge ${
+                      l.type === "입고" ? "bg-emerald-50 text-emerald-600" : "bg-red-50 text-red-600"
+                    }`}
+                  >
+                    {l.type === "입고" ? <ArrowDownCircle size={12} /> : <ArrowUpCircle size={12} />}
+                    {l.type}
+                  </span>
+                </td>
+                <td className={`table-td font-semibold ${l.type === "입고" ? "text-emerald-600" : "text-red-600"}`}>{l.qty}</td>
+                <td className="table-td text-black">{l.reason}</td>
+                <td className="table-td text-black">{l.staff}</td>
+              </tr>
+            ))}
+            {stockLogs.length === 0 && (
+              <tr>
+                <td colSpan={6} className="table-td py-8 text-center text-black/50">
+                  입출고 내역이 없습니다.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+
       {addOpen && (
         <Modal title="메뉴 추가" onClose={() => setAddOpen(false)}>
           <div className="space-y-3 text-sm">
@@ -351,6 +430,70 @@ export default function MenuPage() {
             </button>
             <button className="btn-primary flex-1" onClick={addMenu}>
               추가
+            </button>
+          </div>
+        </Modal>
+      )}
+
+      {logOpen && (
+        <Modal title="재고 입출고 등록" onClose={() => setLogOpen(false)}>
+          <div className="space-y-3 text-sm">
+            <div>
+              <label className="mb-1 block text-xs text-black/60">품목</label>
+              <input
+                className="input"
+                value={logForm.item}
+                onChange={(e) => setLogForm((f) => ({ ...f, item: e.target.value }))}
+                placeholder="예: 원두(남미) 2kg"
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="mb-1 block text-xs text-black/60">구분</label>
+                <select
+                  className="input"
+                  value={logForm.type}
+                  onChange={(e) => setLogForm((f) => ({ ...f, type: e.target.value as StockLog["type"] }))}
+                >
+                  <option>입고</option>
+                  <option>출고</option>
+                </select>
+              </div>
+              <div>
+                <label className="mb-1 block text-xs text-black/60">수량</label>
+                <input
+                  className="input"
+                  value={logForm.qty}
+                  onChange={(e) => setLogForm((f) => ({ ...f, qty: e.target.value }))}
+                  placeholder="예: 2kg"
+                />
+              </div>
+            </div>
+            <div>
+              <label className="mb-1 block text-xs text-black/60">사유</label>
+              <input
+                className="input"
+                value={logForm.reason}
+                onChange={(e) => setLogForm((f) => ({ ...f, reason: e.target.value }))}
+                placeholder="예: 정기 발주 / 판매 소진 / 폐기"
+              />
+            </div>
+            <div>
+              <label className="mb-1 block text-xs text-black/60">담당자</label>
+              <input
+                className="input"
+                value={logForm.staff}
+                onChange={(e) => setLogForm((f) => ({ ...f, staff: e.target.value }))}
+                placeholder="예: 정다은"
+              />
+            </div>
+          </div>
+          <div className="mt-4 flex gap-2">
+            <button className="btn-secondary flex-1" onClick={() => setLogOpen(false)}>
+              취소
+            </button>
+            <button className="btn-primary flex-1" onClick={addStockLog}>
+              등록
             </button>
           </div>
         </Modal>

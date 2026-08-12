@@ -79,6 +79,17 @@ export const recentOrdersToStock = [
   { date: "2026-07-28", item: "원두 (남미) 3종 2kg" },
 ];
 
+// 재고 입출고 로그 ----------------------------------------------------------
+export type StockLog = { id: string; date: string; item: string; type: "입고" | "출고"; qty: string; reason: string; staff: string };
+export const stockLogs: StockLog[] = [
+  { id: "sl1", date: "2026.08.07 09:10", item: "우유 20L", type: "입고", qty: "+20L", reason: "정기 발주", staff: "정다은" },
+  { id: "sl2", date: "2026.08.07 08:40", item: "바닐라 시럽", type: "출고", qty: "-2병", reason: "판매 소진", staff: "한지호" },
+  { id: "sl3", date: "2026.08.06 19:20", item: "딸기(냉동) 3kg", type: "입고", qty: "+3kg", reason: "긴급 발주", staff: "김사장" },
+  { id: "sl4", date: "2026.08.06 15:05", item: "크루아상 반죽", type: "출고", qty: "-15개", reason: "품절 처리", staff: "오세영" },
+  { id: "sl5", date: "2026.08.05 10:00", item: "원두(남미) 2kg", type: "입고", qty: "+2kg", reason: "정기 발주", staff: "정다은" },
+  { id: "sl6", date: "2026.08.04 13:30", item: "생크림 5개", type: "출고", qty: "-5개", reason: "폐기 (유통기한)", staff: "한지호" },
+];
+
 // 주문/결제(POS) 관리 ---------------------------------------------------
 export type Order = {
   id: string;
@@ -128,6 +139,16 @@ export const reservationCounts: Record<string, number> = {
   "2026-08-17": 1,
 };
 
+// 노쇼 방지 설정 ----------------------------------------------------------
+export const noShowSettings = {
+  depositEnabled: true,
+  depositAmount: 5000,
+  freeCancelHours: 3,
+  penalty: "포인트 차감" as "포인트 차감" | "예약 제한" | "안내만 발송",
+  penaltyDetail: "노쇼 1회당 3,000P 차감, 3회 누적 시 온라인 예약 1개월 제한",
+  monthNoShow: 4,
+};
+
 // 실시간 좌석 현황 --------------------------------------------------------
 export type Seat = { id: string; label: string; status: "사용중" | "예약됨" | "비어있음" | "청소중"; guest?: string; people?: number; since?: string };
 export const seats: Seat[] = [
@@ -146,6 +167,26 @@ export const seats: Seat[] = [
   { id: "13", label: "13", status: "예약됨" },
 ];
 
+// 직원 관리 ---------------------------------------------------------------
+export type Staff = {
+  id: string;
+  name: string;
+  role: "매니저" | "바리스타" | "홀 스태프" | "파트타임";
+  phone: string;
+  email: string;
+  permission: "전체 관리" | "주문/예약 관리" | "조회 전용";
+  status: "근무중" | "휴직" | "퇴사";
+  hireDate: string;
+};
+export const staffList: Staff[] = [
+  { id: "s1", name: "김사장", role: "매니저", phone: "010-1111-0000", email: "owner@ooocoffee.com", permission: "전체 관리", status: "근무중", hireDate: "2023.03.02" },
+  { id: "s2", name: "정다은", role: "바리스타", phone: "010-2222-1111", email: "daeun@ooocoffee.com", permission: "주문/예약 관리", status: "근무중", hireDate: "2024.06.15" },
+  { id: "s3", name: "한지호", role: "바리스타", phone: "010-3333-2222", email: "jiho@ooocoffee.com", permission: "주문/예약 관리", status: "근무중", hireDate: "2024.11.01" },
+  { id: "s4", name: "오세영", role: "홀 스태프", phone: "010-4444-3333", email: "seyoung@ooocoffee.com", permission: "조회 전용", status: "근무중", hireDate: "2025.02.20" },
+  { id: "s5", name: "류하나", role: "파트타임", phone: "010-5555-4444", email: "hana@ooocoffee.com", permission: "조회 전용", status: "휴직", hireDate: "2025.05.10" },
+];
+export const staffStats = { total: 5, active: 4, onLeave: 1, newThisMonth: 1 };
+
 // 매장 소식 ---------------------------------------------------------------
 export type Notice = { id: string; title: string; type: "공지" | "이벤트" | "배너"; period: string; status: "게시중" | "예약" | "종료"; views: number };
 export const notices: Notice[] = [
@@ -158,13 +199,31 @@ export const notices: Notice[] = [
 
 // 멤버십 (포인트·쿠폰) -----------------------------------------------------
 export const membershipStats = { totalMembers: 1248, totalPoints: 98450, monthUsedPoints: 24300, couponRate: 38 };
-export type Coupon = { id: string; name: string; discount: string; target: string; period: string; status: "진행중" | "종료"; used: number };
+export type Coupon = { id: string; name: string; discount: string; target: string; period: string; status: "진행중" | "종료"; used: number; limit: number };
 export const coupons: Coupon[] = [
-  { id: "c1", name: "신메뉴 오픈 기념 쿠폰", discount: "15% 할인", target: "전체 고객", period: "~2026.08.31", status: "진행중", used: 128 },
-  { id: "c2", name: "여름 시즌 음료 쿠폰", discount: "2,000원 할인", target: "전체 고객", period: "~2026.08.31", status: "진행중", used: 96 },
-  { id: "c3", name: "생일 축하 쿠폰", discount: "3,000원 할인", target: "생일 회원", period: "~2026.12.31", status: "진행중", used: 24 },
-  { id: "c4", name: "단골 감사 쿠폰", discount: "10% 할인", target: "단골 고객", period: "~2026.10.31", status: "종료", used: 72 },
-  { id: "c5", name: "휴일 방문 쿠폰", discount: "1,000원 할인", target: "전체 고객", period: "~2026.07.31", status: "종료", used: 203 },
+  { id: "c1", name: "신메뉴 오픈 기념 쿠폰", discount: "15% 할인", target: "전체 고객", period: "~2026.08.31", status: "진행중", used: 128, limit: 300 },
+  { id: "c2", name: "여름 시즌 음료 쿠폰", discount: "2,000원 할인", target: "전체 고객", period: "~2026.08.31", status: "진행중", used: 96, limit: 200 },
+  { id: "c3", name: "생일 축하 쿠폰", discount: "3,000원 할인", target: "생일 회원", period: "~2026.12.31", status: "진행중", used: 24, limit: 100 },
+  { id: "c4", name: "단골 감사 쿠폰", discount: "10% 할인", target: "단골 고객", period: "~2026.10.31", status: "종료", used: 72, limit: 100 },
+  { id: "c5", name: "휴일 방문 쿠폰", discount: "1,000원 할인", target: "전체 고객", period: "~2026.07.31", status: "종료", used: 203, limit: 250 },
+];
+
+// 친환경 포인트 / 텀블러 적립·기부 -------------------------------------------
+export const ecoPointsSettings = {
+  enabled: true,
+  tumblerPoint: 300,
+  reusableCupPoint: 100,
+  donationEnabled: true,
+  donationRatio: 1, // 고객 적립 1P당 매장이 1P를 환경 기금에 추가 적립
+  monthDonatedPoint: 128600,
+  monthTumblerUses: 412,
+};
+export type EcoAction = { id: string; type: "텀블러 지참" | "다회용기 이용"; customer: string; point: number; date: string };
+export const ecoActions: EcoAction[] = [
+  { id: "eco1", type: "텀블러 지참", customer: "김인수", point: 300, date: "2026.08.07 12:34" },
+  { id: "eco2", type: "텀블러 지참", customer: "이지은", point: 300, date: "2026.08.07 11:20" },
+  { id: "eco3", type: "다회용기 이용", customer: "박서준", point: 100, date: "2026.08.06 18:45" },
+  { id: "eco4", type: "텀블러 지참", customer: "최유리", point: 300, date: "2026.08.06 14:22" },
 ];
 
 // 고객 및 리뷰 관리 ----------------------------------------------------
@@ -251,11 +310,42 @@ export const recentRetouches = [
 
 // AI 기능 관리 --------------------------------------------------------------
 export const aiFeatures = [
-  { id: "af1", name: "AI 메뉴 추천", desc: "고객 선호도 분석을 통한 인기 메뉴 추천", enabled: true },
-  { id: "af2", name: "AI 수요 예측", desc: "요일/시간대별 매출 및 수요 예측", enabled: true },
-  { id: "af3", name: "AI 리뷰 분석", desc: "고객 리뷰 감정 분석 및 인사이트 제공", enabled: true },
-  { id: "af4", name: "AI 재고 관리", desc: "재고 소진 예측 및 자동 발주 알림", enabled: false },
+  { id: "af1", name: "AI 매출 예측", desc: "요일/시간대별 매출 흐름을 예측해 리포트로 제공", enabled: true },
+  { id: "af2", name: "AI 프로모션 문구", desc: "메뉴·타깃·톤에 맞는 홍보 문구를 자동으로 생성", enabled: true },
+  { id: "af3", name: "AI 리뷰 감성분석", desc: "고객 리뷰의 긍정·부정 감정과 핵심 키워드 분석", enabled: true },
+  { id: "af4", name: "AI 시즌 할인 제안", desc: "판매 데이터 기반 시즌 할인 메뉴·할인율 추천", enabled: false },
 ];
+
+// AI 프로모션 문구 생성 -------------------------------------------------------
+export const promoMenus = ["아이스 아메리카노", "딸기 요거트 스무디", "바닐라 라떼", "크루아상", "말차 라떼"];
+export const promoTones = ["발랄한", "감성적인", "따뜻한", "trendy한"] as const;
+export const promoTemplates: { menu: string; tone: string; text: string }[] = [
+  { menu: "아이스 아메리카노", tone: "발랄한", text: "🔥 무더위엔 역시 아이스 아메리카노! 오늘 하루 1,000원 할인 이벤트 진행 중이에요 ☕" },
+  { menu: "딸기 요거트 스무디", tone: "감성적인", text: "달콤 상큼 딸기 요거트 스무디로 오후를 채워보세요 🍓 지금 방문 시 사이즈업 무료!" },
+  { menu: "바닐라 라떼", tone: "따뜻한", text: "부드러운 바닐라 라떼 한 잔, 오늘 하루도 수고한 나에게 주는 작은 선물 🤎" },
+  { menu: "크루아상", tone: "trendy한", text: "바삭하고 촉촉한 크루아상, 지금 이 시간 가장 신선해요 🥐 커피와 함께 즐겨보세요!" },
+  { menu: "말차 라떼", tone: "감성적인", text: "진한 말차의 풍미가 가득한 라떼 한 잔, 잠깐의 여유를 선물해 드려요 🍵" },
+];
+
+// AI 리뷰 감성분석 -----------------------------------------------------------
+export const reviewSentiment = {
+  positive: 78,
+  neutral: 15,
+  negative: 7,
+  positiveKeywords: ["친절해요", "분위기 좋아요", "커피 맛있어요"],
+  negativeKeywords: ["대기시간 길어요", "좌석이 협소해요"],
+  summary:
+    "최근 7일간 리뷰의 78%가 긍정적이에요. '친절함'과 '분위기'에 대한 긍정 언급이 가장 많고, '대기시간'에 대한 부정 언급이 소폭 늘었어요.",
+};
+
+// AI 시즌 할인 제안 ----------------------------------------------------------
+export type SeasonSuggestion = { id: string; menu: string; season: string; suggestedDiscount: number; reason: string };
+export const seasonSuggestions: SeasonSuggestion[] = [
+  { id: "ss1", menu: "아이스 아메리카노", season: "여름 성수기", suggestedDiscount: 10, reason: "최근 2주 판매량 32% 증가, 경쟁 매장 대비 가격 경쟁력이 낮아요." },
+  { id: "ss2", menu: "딸기 요거트 스무디", season: "여름 시즌 메뉴", suggestedDiscount: 15, reason: "시즌 종료가 임박한 재고예요. 재구매율이 높은 메뉴라 할인 효과가 클 것으로 보여요." },
+  { id: "ss3", menu: "콜드브루", season: "여름 성수기", suggestedDiscount: 5, reason: "꾸준한 판매량이에요. 소폭 할인으로 신규 고객 유입을 기대할 수 있어요." },
+];
+
 export const salesForecast = [
   { day: "8/3 (월)", value: 900000 },
   { day: "8/4 (화)", value: 1150000 },
